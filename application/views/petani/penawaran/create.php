@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Buat Penawaran</button>
-                <a href="<?= site_url('petani/penawaran') ?>" class="btn btn-secondary">Kembali</a>
+                <a href="<?= site_url('petani/penawaran/create') ?>" class="btn btn-secondary">Kembali</a>
             </form>
         </div>
     </div>

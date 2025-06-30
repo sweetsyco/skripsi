@@ -140,6 +140,7 @@ $(document).ready(function() {
     checkTableResponsive();
     $(window).resize(checkTableResponsive);
 });
+        });
     </script>
 </body>
 </html>

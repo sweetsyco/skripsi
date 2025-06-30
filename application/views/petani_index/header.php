@@ -20,10 +20,6 @@
                 <i class="fas fa-truck"></i>
                 <span>Penugasan Kurir</span>
             </a>
-            <a href="<?= base_url('petani/komoditas') ?>">
-                <i class="fas fa-seedling"></i>
-                <span>Komoditas Saya</span>
-            </a>
             <a href="<?= base_url('petani/profil') ?>">
                 <i class="fas fa-user-circle"></i>
                 <span>Profil Saya</span>
