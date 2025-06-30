@@ -72,7 +72,7 @@
                                                         <i class="fas fa-eye"></i> Lihat
                                                     </a>
                                                     <?php if ($p->status == 'open'): ?>
-                                                    <a href="<?= site_url('distributor/permintaan/tutup/' . $p->id_permintaan) ?>" class="action-btn btn-close">
+                                                    <a href="<?= site_url('distributor/permintaan/tutup/' . $p->id_permintaan) ?>" class="action-btn btn-keluar"  data-id="close-<?= $p->id_permintaan ?>">
                                                         <i class="fas fa-times"></i> Tutup
                                                     </a>
                                                     <?php endif; ?>

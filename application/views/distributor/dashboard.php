@@ -84,58 +84,26 @@
                 <div class="card">
                     <div class="card-header">
                         <h3>Aktivitas Terbaru</h3>
-                        <a href="#" class="small">Lihat Semua</a>
                     </div>
                     <div class="card-body">
-                        <div class="activity-item">
-                            <div class="activity-icon">
-                                <i class="fas fa-handshake"></i>
+						 <?php if(!empty($aktivitas_terbaru)) : ?>
+                            <?php foreach($aktivitas_terbaru as $a): ?>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-bullhorn"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title"><?= $a['message'] ?></div>
+                                    <div class="activity-time"><?= date('d M Y, H:i', strtotime($a['time'])) ?></div>
+                                </div>
                             </div>
-                            <div class="activity-content">
-                                <div class="activity-title">Petani Budi menawarkan 50kg Beras Premium seharga Rp12.000/kg</div>
-                                <div class="activity-time">10 menit yang lalu</div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="text-center py-4 text-muted">
+                                <i class="fas fa-info-circle fa-2x mb-2"></i>
+                                <p>Tidak ada aktivitas terbaru</p>
                             </div>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-icon">
-                                <i class="fas fa-times-circle text-danger"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-title">Penawaran Anda untuk 100kg Cabe Rawit ditolak oleh Petani Siti</div>
-                                <div class="activity-time">1 jam yang lalu</div>
-                            </div>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-icon">
-                                <i class="fas fa-truck"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-title">Kurir Andi telah menyelesaikan verifikasi komoditas di Petani Ripal</div>
-                                <div class="activity-time">3 jam yang lalu</div>
-                            </div>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-icon">
-                                <i class="fas fa-clipboard-list"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-title">Permintaan baru untuk 200kg Bawang Merah telah dibuat</div>
-                                <div class="activity-time">5 jam yang lalu</div>
-                            </div>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-icon">
-                                <i class="fas fa-check-circle text-success"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-title">Pembayaran untuk 150kg Beras Premium ke Petani Budi telah selesai</div>
-                                <div class="activity-time">Kemarin, 14:30</div>
-                            </div>
-                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -147,45 +115,17 @@
                         <h3>Progress Permintaan</h3>
                     </div>
                     <div class="card-body">
-                        <div class="progress-container">
-                            <div class="progress-label">
-                                <span>Beras Premium - 500kg</span>
-                                <span>60%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-container">
-                            <div class="progress-label">
-                                <span>Cabe Rawit - 300kg</span>
-                                <span>30%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-info" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-container">
-                            <div class="progress-label">
-                                <span>Bawang Merah - 200kg</span>
-                                <span>75%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-container">
-                            <div class="progress-label">
-                                <span>Kedelai - 400kg</span>
-                                <span>45%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
+						<?php foreach ($permintaan as $index => $p): ?>
+							<div class="progress-container">
+								<div class="progress-label">
+									<span><?= $p->nama_komoditas ?> - <?= number_format($p->jumlah, 2) . ' ' . $p->satuan ?></span>
+									<span><?= $p->progres ?>%</span>
+								</div>
+								<div class="progress">
+									<div class="progress-bar bg-success" role="progressbar" style="width: <?= $p->progres ?>%" aria-valuenow="<?= $p->progres ?>" aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+							</div>
+						<?php endforeach; ?>
                     </div>
                 </div>
                 

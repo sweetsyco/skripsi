@@ -95,7 +95,7 @@ class Laporan extends CI_Controller {
 
     public function export_excel() {
     // Load autoloader Composer
-    require_once FCPATH . 'vendor/autoload.php';
+    // require_once FCPATH . 'vendor/autoload.php';
 
     // Pastikan tidak ada output sebelum ini
     ob_clean();
@@ -118,7 +118,6 @@ class Laporan extends CI_Controller {
 
     // Ambil data laporan
     $laporan = $this->d_report_model->get_laporan_permintaan($this->id_distributor, $filter);
-
     // Format periode untuk ditampilkan
     $periode = "Semua Periode";
     if (!empty($get_params['start_date']) && !empty($get_params['end_date'])) {

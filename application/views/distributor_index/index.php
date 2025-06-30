@@ -412,38 +412,46 @@
             background-color: rgba(220, 53, 69, 0.15);
             color: #dc3545;
         }
-        
-        .action-btn {
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.2s;
-        }
-        
-        .btn-view {
-            background-color: rgba(23, 162, 184, 0.15);
-            color: #17a2b8;
-            border: none;
-        }
-        
-        .btn-view:hover {
-            background-color: rgba(23, 162, 184, 0.25);
-            text-decoration: none;
-        }
-        
-        .btn-close {
-            background-color: rgba(220, 53, 69, 0.15);
-            color: #dc3545;
-            border: none;
-        }
-        
-        .btn-close:hover {
-            background-color: rgba(220, 53, 69, 0.25);
-            text-decoration: none;
-        }
+
+		.action-buttons {
+			display: flex;
+			/* flex-wrap: wrap; */
+			gap: 2px;
+		}
+
+		.action-btn {
+			padding: 6px 12px;
+			border-radius: 6px;
+			display: inline-flex;  /* Gunakan inline-flex agar tombol mengikuti konten */
+			font-size: 14px;
+			align-items: center;
+			gap: 5px;
+			margin-right: 2px;  /* Ganti gap dengan margin */
+			transition: all 0.2s;
+			text-decoration: none;  /* Hapus underline default link */
+		}
+
+		.btn-view {
+			background-color: rgba(23, 162, 184, 0.15);
+			color: #17a2b8;
+			border: none;
+		}
+
+		.btn-view:hover {
+			background-color: rgba(23, 162, 184, 0.25);
+			text-decoration: none;
+		}
+
+		.btn-keluar {
+			background-color: rgba(220, 53, 69, 0.15);
+			color: #dc3545;
+			border: none;
+		}
+
+		.btn-keluar:hover {
+			background-color: rgba(220, 53, 69, 0.25);
+			text-decoration: none;
+		}
         
         @media (max-width: 992px) {
             .sidebar {

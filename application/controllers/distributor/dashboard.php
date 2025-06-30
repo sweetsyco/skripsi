@@ -22,6 +22,7 @@ class Dashboard extends CI_Controller {
     {
         parent::__construct();
         $this->load->model('Permintaan_model');
+        // $this->load->model('Petani_model');
         $this->load->model('Penawaran_model');
         $this->load->model('Penugasan_model');
         $this->load->model('Kurir_model');
@@ -35,6 +36,38 @@ class Dashboard extends CI_Controller {
     }
     public function index(){
         $id_distributor = $this->session->userdata('id_distributor');
+
+
+		$permintaan = $this->Permintaan_model->get_with_komoditas(
+            $id_distributor, 
+            10, 
+            1
+        );
+        // Load model
+        //$permintaan = $this->Permintaan_model->get_with_komoditas($id_distributor);
+        
+        // Hitung statistik
+        foreach ($permintaan as $p) {
+        $p->progres = ($p->jumlah > 0) 
+            ? (($p->jumlah - $p->sisa_permintaan) / $p->jumlah) * 100 
+            : 0;
+        }
+        
+        foreach ($permintaan as $p) {
+            if ($p->status == 'closed') {
+                $permintaan_selesai++;
+            }
+        }
+
+		// var_dump($permintaan);
+		// die();
+
+		$activity = $this->Aktivitas_model->get_recent_activities($id_distributor);
+        
+		if($activity == null) {
+            $activity = [];
+        }
+
         $data['user'] = array(
             'nama' => $this->session->userdata('nama'),
             'peran' => $this->session->userdata('peran'),
@@ -42,6 +75,8 @@ class Dashboard extends CI_Controller {
         );
         $data = [
             'title' => 'Dashboard Distributor',
+			'permintaan' => $permintaan,
+			'aktivitas_terbaru' => $activity,
             'permintaan_aktif' => $this->Permintaan_model->get_by_distributor($id_distributor, 'open'),
             'penawaran_baru' => $this->Penawaran_model->get_new_offers_for_distributor($id_distributor),
             'penugasan_kurir' => $this->Kurir_model->get_by_distributor($id_distributor),

@@ -91,6 +91,7 @@ class Permintaan extends CI_Controller {
             'per_page' => $config['per_page'],
             'current_page' => $page
             ];
+
             $this->load->view('distributor_index/index',$data);
             $this->load->view('distributor_index/header');
             $this->load->view('distributor/permintaan/index', $data);
