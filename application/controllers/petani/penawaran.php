@@ -73,8 +73,9 @@ class Penawaran extends CI_Controller {
                 $this->load->view('petani_index/index');
                 $this->load->view('petani_index/header');
                 $this->load->view('petani/penawaran/create', $data);
-                $this->load->view('petani_index/footer');
+                $this->load->view('petani_index/penawaran_footer');
             } else {
+                
                 $data_penawaran = [
                     'id_permintaan' => $id_permintaan,
                     'id_petani' => $id_petani,

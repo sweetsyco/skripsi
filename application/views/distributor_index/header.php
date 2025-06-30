@@ -21,6 +21,10 @@
                 <i class="fas fa-truck"></i>
                 <span>Kurir</span>
             </a>
+            <a href="<?= base_url('distributor/komoditas') ?>">
+                <i class="fas fa-seedling"></i>
+                <span>Komoditas</span>
+            </a>
             <a href="<?= site_url('distributor/laporan') ?>">
                 <i class="fas fa-file-alt"></i>
                 <span>Laporan</span>

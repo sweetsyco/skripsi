@@ -32,7 +32,7 @@ class Penawaran extends CI_Controller {
     $this->load->view('distributor_index/index',$data);
     $this->load->view('distributor_index/header');
     $this->load->view('distributor/penawaran/index', $data);
-    $this->load->view('distributor_index/footer');
+    $this->load->view('distributor_index/penawaran_footer');
     }
 
     public function update_status() {

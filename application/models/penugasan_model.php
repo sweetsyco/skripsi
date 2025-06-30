@@ -88,4 +88,34 @@ class Penugasan_model extends CI_Model {
         $this->db->where('id_penugasan', $id_penugasan);
         return $this->db->update('penugasan');
     }
+    public function get_penugasan_by_petani($id_petani) {
+        $this->db->select('penugasan.*, penawaran.jumlah, penawaran.harga, permintaan.id_komoditas, komoditas.nama_komoditas, distributor.nama_perusahaan, pengguna.nama as nama_kurir');
+        $this->db->from('penugasan');
+        $this->db->join('penawaran', 'penawaran.id_penawaran = penugasan.id_penawaran');
+        $this->db->join('permintaan', 'permintaan.id_permintaan = penawaran.id_permintaan');
+        $this->db->join('komoditas', 'komoditas.id_komoditas = permintaan.id_komoditas');
+        $this->db->join('distributor', 'distributor.id_distributor = permintaan.id_distributor');
+        $this->db->join('kurir', 'kurir.id_kurir = penugasan.id_kurir');
+        $this->db->join('pengguna', 'pengguna.id_pengguna = kurir.id_pengguna');
+        $this->db->where('penawaran.id_petani', $id_petani);
+        $this->db->order_by('penugasan.ditugaskan_pada', 'DESC');
+        return $this->db->get()->result_array();
+    }
+
+    public function get_penugasan_detail($id_penugasan, $id_petani) {
+        $this->db->select('penugasan.*, penawaran.jumlah, penawaran.harga, permintaan.id_komoditas, 
+            komoditas.nama_komoditas, distributor.nama_perusahaan, distributor.alamat as alamat_distributor,
+            distributor.no_telepon as telp_distributor, pengguna.nama as nama_kurir, 
+            kurir.no_kendaraan, kurir.cakupan_area');
+        $this->db->from('penugasan');
+        $this->db->join('penawaran', 'penawaran.id_penawaran = penugasan.id_penawaran');
+        $this->db->join('permintaan', 'permintaan.id_permintaan = penawaran.id_permintaan');
+        $this->db->join('komoditas', 'komoditas.id_komoditas = permintaan.id_komoditas');
+        $this->db->join('distributor', 'distributor.id_distributor = permintaan.id_distributor');
+        $this->db->join('kurir', 'kurir.id_kurir = penugasan.id_kurir');
+        $this->db->join('pengguna', 'pengguna.id_pengguna = kurir.id_pengguna');
+        $this->db->where('penugasan.id_penugasan', $id_penugasan);
+        $this->db->where('penawaran.id_petani', $id_petani);
+        return $this->db->get()->row_array();
+    }
 }

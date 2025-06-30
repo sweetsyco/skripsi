@@ -24,6 +24,7 @@
                                     <th>Komoditas</th>
                                     <th>Distributor</th>
                                     <th>Jumlah Dibutuhkan</th>
+                                    <th>Sisa Permintaan</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -37,7 +38,8 @@
                                         </div>
                                     </td>
                                     <td><?= $p['nama_distributor'] ?></td>
-                                    <td><?= $p['jumlah'] ?> kg</td>
+                                    <td><?= $p['jumlah'] ?></td>
+                                    <td><?= $p['sisa_permintaan'] ?> kg</td>
                                     <td>
                                         <a href="<?= site_url('petani/penawaran/create/'.$p['id_permintaan']) ?>" class="btn btn-sm btn-primary">
                                             <i class="fas fa-plus me-1"></i> Buat Penawaran
