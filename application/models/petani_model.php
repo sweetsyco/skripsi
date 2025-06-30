@@ -91,4 +91,19 @@ class Petani_model extends CI_Model {
         $this->db->where('petani.id_pengguna', $id_pengguna);
         return $this->db->get()->row_array();
     }
+
+    public function get_by_pengguna($id_pengguna) {
+        $this->db->select('petani.*, pengguna.nama, pengguna.email, pengguna.dibuat_pada');
+        $this->db->from('petani');
+        $this->db->join('pengguna', 'petani.id_pengguna = pengguna.id_pengguna');
+        $this->db->where('petani.id_pengguna', $id_pengguna);
+        $query = $this->db->get();
+        
+        return $query->row_array();
+    }
+
+    public function update($id_petani, $data) {
+        $this->db->where('id_petani', $id_petani);
+        return $this->db->update('petani', $data);
+    }
 }

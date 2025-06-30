@@ -197,4 +197,13 @@ public function get_by_detail($id_permintaan) {
     $this->db->where('penawaran.id_permintaan', $id_permintaan);
     return $this->db->get()->result();
 }
+
+public function get_komoditas_detail($id_penawaran) {
+    $this->db->select('komoditas.nama_komoditas, komoditas.satuan');
+    $this->db->from('penawaran');
+    $this->db->join('permintaan', 'permintaan.id_permintaan = penawaran.id_permintaan');
+    $this->db->join('komoditas', 'komoditas.id_komoditas = permintaan.id_komoditas');
+    $this->db->where('penawaran.id_penawaran', $id_penawaran);
+    return $this->db->get()->row();
+}
 }

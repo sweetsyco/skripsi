@@ -118,8 +118,7 @@ class Laporan extends CI_Controller {
 
     // Ambil data laporan
     $laporan = $this->d_report_model->get_laporan_permintaan($this->id_distributor, $filter);
-    var_dump($laporan);
-    die();
+
     // Format periode untuk ditampilkan
     $periode = "Semua Periode";
     if (!empty($get_params['start_date']) && !empty($get_params['end_date'])) {

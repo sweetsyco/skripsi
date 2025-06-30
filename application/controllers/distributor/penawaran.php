@@ -6,6 +6,7 @@ class Penawaran extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('penawaran_model');
+        $this->load->model('aktivitas_model');
         // Cek login
         if (!$this->session->userdata('user_id')) {
             redirect('auth/login');
@@ -96,12 +97,34 @@ class Penawaran extends CI_Controller {
 
         // Commit transaksi jika semua berhasil
         $this->db->trans_commit();
-        echo json_encode(['sukses' => true]);
         
-    } catch (Exception $e) {
-        // Rollback jika ada error
-        $this->db->trans_rollback();
-        echo json_encode(['sukses' => false, 'pesan' => $e->getMessage()]);
-    }
+            $id_pengguna = $this->session->userdata('user_id');
+            $id_distributor = $this->session->userdata('id_distributor');          
+            // Dapatkan detail komoditas untuk pesan aktivitas
+            $komoditas = $this->penawaran_model->get_komoditas_detail($id_penawaran);
+            $nama_distributor = $this->session->userdata('nama_distributor'); 
+            
+            if ($status_baru == 'accepted') {
+                $pesan = "Penawaran untuk {$komoditas->nama_komoditas} {$penawaran['jumlah']} {$komoditas->satuan} diterima oleh {$nama_distributor}";
+            } else if ($status_baru == 'rejected') {
+                $pesan = "Penawaran untuk {$komoditas->nama_komoditas} {$penawaran['jumlah']} {$komoditas->satuan} ditolak {$nama_distributor}";
+            }
+            
+            // Catat aktivitas
+            $this->aktivitas_model->tambah_aktivitas(
+                $id_pengguna,
+                $id_distributor,
+                'penawaran',
+                $pesan
+            );
+            
+            echo json_encode(['sukses' => true]);
+            
+        } catch (Exception $e) {
+            // Rollback jika ada error
+            $this->db->trans_rollback();
+            echo json_encode(['sukses' => false, 'pesan' => $e->getMessage()]);
+        } 
+        
 }
 }

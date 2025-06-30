@@ -141,6 +141,17 @@ $(document).ready(function() {
     $(window).resize(checkTableResponsive);
 });
         });
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animasi untuk card profil
+            const profileCard = document.querySelector('.card');
+            profileCard.style.transform = 'translateY(0)';
+            profileCard.style.opacity = '1';
+            
+            // Set initial state
+            profileCard.style.transform = 'translateY(20px)';
+            profileCard.style.opacity = '0';
+            profileCard.style.transition = 'transform 0.5s, opacity 0.5s';
+        });
     </script>
 </body>
 </html>

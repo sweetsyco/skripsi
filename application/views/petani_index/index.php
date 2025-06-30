@@ -659,6 +659,16 @@
             .create-image i {
                 font-size: 48px;
             }
+            .profile-card {
+                border-radius: 15px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+            .profile-header {
+                background-color: #4CAF50;
+                color: white;
+                border-top-left-radius: 15px;
+                border-top-right-radius: 15px;
+            }
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

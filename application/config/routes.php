@@ -84,3 +84,4 @@ $route['distributor/laporan'] = 'distributor/laporan';
 $route['petani/dashboard'] = 'petani/dashboard';
 $route['petani/penawaran'] = 'petani/penawaran';
 $route['petani/penawaran/buat'] = 'petani/penawaran/create';
+$route['petani/profil'] = 'petani/profile';
