@@ -84,7 +84,6 @@
                 <div class="card">
                     <div class="card-header">
                         <h3>Aktivitas Terbaru</h3>
-                        <a href="#" class="small">Lihat Semua</a>
                     </div>
                     <div class="card-body">
 						 <?php if(!empty($aktivitas_terbaru)) : ?>
