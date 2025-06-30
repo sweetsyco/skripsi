@@ -87,55 +87,24 @@
                         <a href="#" class="small">Lihat Semua</a>
                     </div>
                     <div class="card-body">
-                        <div class="activity-item">
-                            <div class="activity-icon">
-                                <i class="fas fa-handshake"></i>
+						 <?php if(!empty($aktivitas_terbaru)) : ?>
+                            <?php foreach($aktivitas_terbaru as $a): ?>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-bullhorn"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title"><?= $a['message'] ?></div>
+                                    <div class="activity-time"><?= date('d M Y, H:i', strtotime($a['time'])) ?></div>
+                                </div>
                             </div>
-                            <div class="activity-content">
-                                <div class="activity-title">Petani Budi menawarkan 50kg Beras Premium seharga Rp12.000/kg</div>
-                                <div class="activity-time">10 menit yang lalu</div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="text-center py-4 text-muted">
+                                <i class="fas fa-info-circle fa-2x mb-2"></i>
+                                <p>Tidak ada aktivitas terbaru</p>
                             </div>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-icon">
-                                <i class="fas fa-times-circle text-danger"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-title">Penawaran Anda untuk 100kg Cabe Rawit ditolak oleh Petani Siti</div>
-                                <div class="activity-time">1 jam yang lalu</div>
-                            </div>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-icon">
-                                <i class="fas fa-truck"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-title">Kurir Andi telah menyelesaikan verifikasi komoditas di Petani Ripal</div>
-                                <div class="activity-time">3 jam yang lalu</div>
-                            </div>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-icon">
-                                <i class="fas fa-clipboard-list"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-title">Permintaan baru untuk 200kg Bawang Merah telah dibuat</div>
-                                <div class="activity-time">5 jam yang lalu</div>
-                            </div>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-icon">
-                                <i class="fas fa-check-circle text-success"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-title">Pembayaran untuk 150kg Beras Premium ke Petani Budi telah selesai</div>
-                                <div class="activity-time">Kemarin, 14:30</div>
-                            </div>
-                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
