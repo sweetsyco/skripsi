@@ -35,6 +35,33 @@ class Dashboard extends CI_Controller {
     }
     public function index(){
         $id_distributor = $this->session->userdata('id_distributor');
+
+
+		$permintaan = $this->Permintaan_model->get_with_komoditas(
+            $id_distributor, 
+            10, 
+            1
+        );
+        // Load model
+        //$permintaan = $this->Permintaan_model->get_with_komoditas($id_distributor);
+        
+        // Hitung statistik
+        foreach ($permintaan as $p) {
+        $p->progres = ($p->jumlah > 0) 
+            ? (($p->jumlah - $p->sisa_permintaan) / $p->jumlah) * 100 
+            : 0;
+        }
+        
+        foreach ($permintaan as $p) {
+            if ($p->status == 'closed') {
+                $permintaan_selesai++;
+            }
+        }
+
+		// var_dump($permintaan);
+		// die();
+        
+
         $data['user'] = array(
             'nama' => $this->session->userdata('nama'),
             'peran' => $this->session->userdata('peran'),
@@ -42,6 +69,7 @@ class Dashboard extends CI_Controller {
         );
         $data = [
             'title' => 'Dashboard Distributor',
+			'permintaan' => $permintaan,
             'permintaan_aktif' => $this->Permintaan_model->get_by_distributor($id_distributor, 'open'),
             'penawaran_baru' => $this->Penawaran_model->get_new_offers_for_distributor($id_distributor),
             'penugasan_kurir' => $this->Kurir_model->get_by_distributor($id_distributor),

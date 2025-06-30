@@ -147,45 +147,17 @@
                         <h3>Progress Permintaan</h3>
                     </div>
                     <div class="card-body">
-                        <div class="progress-container">
-                            <div class="progress-label">
-                                <span>Beras Premium - 500kg</span>
-                                <span>60%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-container">
-                            <div class="progress-label">
-                                <span>Cabe Rawit - 300kg</span>
-                                <span>30%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-info" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-container">
-                            <div class="progress-label">
-                                <span>Bawang Merah - 200kg</span>
-                                <span>75%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-container">
-                            <div class="progress-label">
-                                <span>Kedelai - 400kg</span>
-                                <span>45%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
+						<?php foreach ($permintaan as $index => $p): ?>
+							<div class="progress-container">
+								<div class="progress-label">
+									<span><?= $p->nama_komoditas ?> - <?= number_format($p->jumlah, 2) . ' ' . $p->satuan ?></span>
+									<span><?= $p->progres ?>%</span>
+								</div>
+								<div class="progress">
+									<div class="progress-bar bg-success" role="progressbar" style="width: <?= $p->progres ?>%" aria-valuenow="<?= $p->progres ?>" aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+							</div>
+						<?php endforeach; ?>
                     </div>
                 </div>
                 
