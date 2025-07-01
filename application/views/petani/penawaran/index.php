@@ -75,7 +75,22 @@
                         </thead>
                         <tbody>
                             <?php foreach ($penawaran as $p): ?>
-                            <tr>
+                            <tr data-komoditas="<?= htmlspecialchars($p['nama_komoditas']) ?>"
+                                data-distributor="<?= htmlspecialchars($p['nama_perusahaan']) ?>"
+                                data-jumlah="<?= $p['jumlah'] ?>"
+                                data-harga="<?= $p['harga'] ?>"
+                                data-status="<?= $p['status'] ?>"
+                                data-tanggal="<?= date('d M Y', strtotime($p['dibuat_pada'])) ?>">
+                                <script>
+        console.log({
+            komoditas: "<?= $p['nama_komoditas'] ?>",
+            distributor: "<?= $p['nama_perusahaan'] ?>",
+            jumlah: <?= $p['jumlah'] ?>,
+            harga: <?= $p['harga'] ?>,
+            status: "<?= $p['status'] ?>",
+            tanggal: "<?= date('d M Y', strtotime($p['dibuat_pada'])) ?>"
+        });
+        </script>
                                 <td data-id="<?= $p['id_penawaran'] ?>">
                                     <div class="d-flex align-items-center">
                                         <i class="fas fa-seedling me-2 text-success"></i>
@@ -87,10 +102,10 @@
                                 <td>Rp <?= number_format($p['harga'], 0, ',', '.') ?></td>
                                 <td>Rp <?= number_format(($p['jumlah'] * $p['harga']) ?? 0) ?></td>
                                 <td>
-                                    <?= number_format($p['sisa_permintaan'] ?? 0, 2) ?> kg
+                                    <?= number_format($p['sisa_permintaan'] ?? 0, 0) ?> kg
                                     <?php if(isset($p['jumlah_permintaan'])): ?>
                                         <small class="text-muted d-block">
-                                            dari <?= number_format($p['jumlah_permintaan'], 2) ?> kg
+                                            dari <?= number_format($p['jumlah_permintaan'], 0) ?> kg
                                         </small>
                                     <?php endif; ?>
                                 </td>
@@ -206,19 +221,19 @@
                                 <h6 class="fw-bold mb-3">Informasi Penawaran</h6>
                                 <div class="detail-item">
                                     <span>Komoditas:</span>
-                                    <span id="detail-komoditas">-</span>
+                                    <span id="detail-komoditas"></span>
                                 </div>
                                 <div class="detail-item">
                                     <span>Distributor:</span>
-                                    <span id="detail-distributor">-</span>
+                                    <span id="detail-distributor"></span>
                                 </div>
                                 <div class="detail-item">
                                     <span>Jumlah:</span>
-                                    <span id="detail-jumlah">-</span>
+                                    <span id="detail-jumlah"></span>
                                 </div>
                                 <div class="detail-item">
                                     <span>Harga:</span>
-                                    <span id="detail-harga">-</span>
+                                    <span id="detail-harga"></span>
                                 </div>
                             </div>
                         </div>
@@ -227,22 +242,14 @@
                                 <h6 class="fw-bold mb-3">Status & Tanggal</h6>
                                 <div class="detail-item">
                                     <span>Status:</span>
-                                    <span id="detail-status" class="badge">-</span>
+                                    <span id="detail-status" class="badge"></span>
                                 </div>
                                 <div class="detail-item">
                                     <span>Tanggal Dibuat:</span>
-                                    <span id="detail-tanggal">-</span>
-                                </div>
-                                <div class="detail-item">
-                                    <span>Terakhir Diubah:</span>
-                                    <span id="detail-update">-</span>
+                                    <span id="detail-tanggal"></span>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-section">
-                        <h6 class="fw-bold mb-3">Catatan Tambahan</h6>
-                        <p id="detail-catatan" class="mb-0">Tidak ada catatan tambahan</p>
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -40,7 +40,7 @@ class Kurir extends CI_Controller {
     }
     
     $id_petani = $petani['id_petani'];
-    $penugasan = $this->penugasan_model->get_penugasan_detail($id_penugasan, $id_petani);
+    $penugasan = $this->penugasan_model->get_penugasan_detail_petani($id_penugasan, $id_petani);
     
     if(empty($penugasan)) {
         $response = array('status' => 'error', 'message' => 'Data penugasan tidak ditemukan');

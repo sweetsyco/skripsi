@@ -86,19 +86,9 @@ class Penawaran extends CI_Controller {
                 ];
 
                 $id_penawaran = $this->penawaran_model->create_penawaran($data_penawaran);
-                if ($id_penawaran) {
-                    $this->session->set_flashdata('success', 'Penawaran berhasil dibuat.');
-                    $this->load->view('petani_index/index');
-                    $this->load->view('petani_index/header');
-                    $this->load->view('petani/penawaran/select_permintaan', $data);
-                    $this->load->view('petani_index/footer');
-                } else {
-                    $this->session->set_flashdata('error', 'Gagal membuat penawaran.');
-                    $this->load->view('petani_index/index');
-                    $this->load->view('petani_index/header');
-                    $this->load->view('petani/penawaran/select_permintaan', $data);
-                    $this->load->view('petani_index/footer');
-                }
+               
+                redirect('petani/penawaran');
+                
             }
         }
 
@@ -180,4 +170,38 @@ class Penawaran extends CI_Controller {
         }
         redirect('penawaran');
     }
+    public function get_detail_json($id_penawaran) {
+    $id_pengguna = $this->session->userdata('user_id');
+    $petani = $this->petani_model->get_petani_data($id_pengguna);
+    
+    if(empty($petani)) {
+        echo json_encode(['error' => 'Profil petani tidak ditemukan']);
+        return;
+    }
+    
+    $id_petani = $petani['id_petani'];
+    $penawaran = $this->penawaran_model->get_penawaran_by_id($id_penawaran, $id_petani);
+    
+    if(empty($penawaran)) {
+        echo json_encode(['error' => 'Penawaran tidak ditemukan']);
+        return;
+    }
+    
+    // Format data untuk response JSON
+    $response = [
+        'success' => true,
+        'data' => [
+            'komoditas' => $penawaran['nama_komoditas'],
+            'distributor' => $penawaran['nama_perusahaan'],
+            'jumlah' => number_format($penawaran['jumlah']) . ' kg',
+            'harga' => 'Rp ' . number_format($penawaran['harga'], 0, ',', '.'),
+            'status' => $penawaran['status'],
+            'tanggal_dibuat' => date('d M Y', strtotime($penawaran['dibuat_pada'])),
+            'tanggal_diubah' => $penawaran['diubah_pada'] ? date('d M Y', strtotime($penawaran['diubah_pada'])) : '-',
+            'catatan' => $penawaran['catatan'] ?? 'Tidak ada catatan tambahan'
+        ]
+    ];
+    
+    echo json_encode($response);
+}
 }

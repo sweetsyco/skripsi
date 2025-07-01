@@ -16,7 +16,14 @@
                     <h4 class="mb-0">Buat Penugasan Baru</h4>
                 </div>
                 <div class="card-body">
-                    <form action="<?= site_url('penugasan/create') ?>" method="post">
+                    <?php if(empty($penawaran)): ?>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i> 
+                            Tidak ada penawaran yang tersedia untuk ditugaskan. 
+                            Semua penawaran yang diterima sudah ditugaskan ke kurir.
+                        </div>
+                    <?php else: ?>
+                    <form action="<?= site_url('distributor/penugasan/create') ?>" method="post">
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="form-group">
@@ -56,6 +63,7 @@
                             </div>
                         </div>
                     </form>
+                     <?php endif; ?>
                 </div>
             </div>
 
@@ -69,65 +77,96 @@
                             <thead>
                                 <tr>
                                     <th width="5%">ID</th>
+                                    <th>Tanggal</th>
+                                    <th width="20%">Kurir</th>
                                     <th>Komoditas</th>
                                     <th>Petani</th>
-                                    <th>Kurir</th>
-                                    <th width="10%">Jumlah</th>
-                                    <th width="15%">Status</th>
-                                    <th width="15%">Waktu Penugasan</th>
+                                    <th width="20%">Jumlah</th>
+                                    <th>Catatan</th>
+                                    <th>Bukti Foto</th>
+                                    <th>Status</th>
                                     <th width="15%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php if(empty($penugasan)): ?>
-                                    <tr>
-                                        <td colspan="8" class="text-center">
-                                            <div class="empty-state py-5">
-                                                <div class="empty-state-icon bg-light rounded-circle d-flex mx-auto mb-4" style="width: 80px; height: 80px;">
-                                                    <i class="fas fa-truck text-info fs-1"></i>
-                                                </div>
-                                                <h5 class="mb-1">Belum ada penugasan</h5>
-                                                <p class="text-muted">Mulai dengan membuat penugasan baru</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php else: ?>
-                                    <?php foreach($penugasan as $t): ?>
-                                        <tr>
-                                            <td><?= $t['id_penugasan'] ?></td>
-                                            <td><?= $t['nama_komoditas'] ?></td>
-                                            <td><?= $t['nama_petani'] ?></td>
-                                            <td><?= $t['nama_kurir'] ?></td>
-                                            <td><?= number_format($t['jumlah'], 2) ?> kg</td>
-                                            <td>
-                                                <span class="status-badge 
-                                                    <?= $t['status'] == 'pending' ? 'badge-warning' : 
-                                                       ($t['status'] == 'approved' ? 'badge-success' : 'badge-danger') ?>">
-                                                    <i class="fas fa-circle me-1 small"></i> 
-                                                    <?= ucfirst($t['status']) ?>
-                                                </span>
-                                            </td>
-                                            <td><?= date('d M Y H:i', strtotime($t['ditugaskan_pada'])) ?></td>
-                                            <td>
-                                                <?php if($t['status'] == 'pending'): ?>
-                                                    <div class="d-flex gap-2">
-                                                        <a href="<?= site_url('penugasan/update_status/'.$t['id_penugasan'].'/approved') ?>" 
-                                                           class="btn btn-sm btn-success action-btn">
-                                                            <i class="fas fa-check me-1"></i> Setujui
-                                                        </a>
-                                                        <a href="<?= site_url('penugasan/update_status/'.$t['id_penugasan'].'/rejected') ?>" 
-                                                           class="btn btn-sm btn-danger action-btn">
-                                                            <i class="fas fa-times me-1"></i> Tolak
-                                                        </a>
-                                                    </div>
-                                                <?php else: ?>
-                                                    <span class="text-muted">Tidak ada aksi</span>
-                                                <?php endif; ?>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </tbody>
+                        <tr>
+                            <td colspan="10" class="text-center">
+                                <div class="empty-state py-5">
+                                    <div class="empty-state-icon bg-light rounded-circle d-flex mx-auto mb-4" style="width: 80px; height: 80px;">
+                                        <i class="fas fa-truck text-info fs-1"></i>
+                                    </div>
+                                    <h5 class="mb-1">Belum ada penugasan</h5>
+                                    <p class="text-muted">Mulai dengan membuat penugasan baru</p>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach($penugasan as $t): ?>
+                            <tr>
+                                <td><?= $t['id_penugasan'] ?></td>
+                                <td><?= date('d M Y H:i', strtotime($t['ditugaskan_pada'])) ?></td>
+                                <td>
+                                    <?= $t['nama_kurir'] ?><br>
+                                    <small class="text-muted"><?= $t['no_kendaraan'] ?></small>
+                                </td>
+                                <td><?= $t['nama_komoditas'] ?></td>
+                                <td><?= $t['nama_petani'] ?></td>
+                                <td><?= number_format($t['jumlah'], 2) ?> kg</td>
+                                <td><?= $t['catatan'] ?: '-' ?></td>
+                                <td>
+                                    <?php if ($t['foto_bukti']): ?>
+                                        <a href="<?= base_url($t['foto_bukti']) ?>" 
+                                           target="_blank" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye me-1"></i> Lihat Bukti
+                                        </a>
+                                    <?php else: ?>
+                                        <span class="text-muted">-</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <span class="badge 
+                                        <?= $t['status'] == 'pending' ? 'bg-warning' : 
+                                           ($t['status'] == 'approved' ? 'bg-success' : 'bg-danger') ?>">
+                                        <i class="fas fa-circle me-1 small"></i> 
+                                        <?= ucfirst($t['status']) ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="<?= site_url('distributor/penugasan/detail/'.$t['id_penugasan']) ?>" 
+                                   class="btn btn-sm btn-info mb-2 w-100">
+                                    <i class="fas fa-info-circle me-1"></i> Detail
+                                    </a>
+                                    <?php if($t['status'] == 'pending'): ?>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <a href="<?= site_url('distributor/penugasan/update_status/'.$t['id_penugasan'].'/approved') ?>" 
+                                               class="btn btn-sm btn-success action-btn">
+                                                <i class="fas fa-check me-1"></i> Setujui
+                                            </a>
+                                            <a href="<?= site_url('distributor/penugasan/update_status/'.$t['id_penugasan'].'/rejected') ?>" 
+                                               class="btn btn-sm btn-danger action-btn">
+                                                <i class="fas fa-times me-1"></i> Tolak
+                                            </a>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <button class="btn btn-sm btn-outline-secondary" disabled>
+                                                <i class="fas fa-info-circle me-1"></i> Selesai
+                                            </button>
+                                            <?php if($t['status'] == 'approved' && $t['foto_bukti']): ?>
+                                                <a href="<?= base_url($t['foto_bukti']) ?>" 
+                                                   target="_blank" 
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-download me-1"></i> Unduh
+                                                </a>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                         </table>
                     </div>
                 </div>
@@ -142,3 +181,36 @@
             </div>
         </div>
     </div>
+    <style>
+    /* Tambahan styling untuk tombol */
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .action-btn {
+        min-width: 60px;
+        white-space: nowrap;
+    }
+    
+    /* Agar tombol responsif di kolom aksi */
+    td {
+        vertical-align: middle !important;
+    }
+    
+    .flex-grow-1 {
+        flex-grow: 1;
+    }
+    
+    .gap-1 {
+        gap: 0.25rem;
+    }
+    
+    .w-100 {
+        width: 100%;
+    }
+    
+    .mb-2 {
+        margin-bottom: 0.5rem;
+    }
+</style>

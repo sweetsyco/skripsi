@@ -81,7 +81,16 @@ $route['distributor/kurir/nonaktifkan/(:num)'] = 'distributor/kurir/deactivate/$
 $route['distributor/laporan'] = 'distributor/laporan';
 
 
-$route['petani/dashboard'] = 'petani/dashboard';
+$route['petani/dashboard'] = 'petani/dashboard/index';
 $route['petani/penawaran'] = 'petani/penawaran';
 $route['petani/penawaran/buat'] = 'petani/penawaran/create';
 $route['petani/profil'] = 'petani/profile';
+
+
+
+$route['kurir/dashboard'] = 'kurir/dashboard';
+$route['kurir/mulai_penugasan/(:num)'] = 'kurir/mulai_penugasan/$1';
+$route['kurir/verifikasi_penugasan/(:num)'] = 'kurir/verifikasi_penugasan/$1';
+$route['kurir/verifikasi'] = 'Kurir/verifikasi/';
+$route['kurir/verifikasi/(:num)'] = 'Kurir/verifikasi/$1';
+$route['kurir/proses_verifikasi/(:num)'] = 'Kurir/proses_verifikasi/$1';

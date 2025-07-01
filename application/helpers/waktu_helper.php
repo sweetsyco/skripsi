@@ -65,5 +65,46 @@ if (!function_exists('waktu_lalu')) {
         // Format akhir
         return $hari[$hari_num] . ', ' . $tanggal . ' ' . $bulan[$bulan_num] . ' ' . $tahun . ', ' . $waktu;
     }
+
+    if (!function_exists('time_elapsed_string')) {
+    function time_elapsed_string($datetime, $full = false) {
+        try {
+            // Cek jika input adalah timestamp
+            if (is_numeric($datetime)) {
+                $timestamp = (int)$datetime;
+                // Validasi range timestamp (antara 1970-2038)
+                if ($timestamp < 0 || $timestamp > 2147483647) {
+                    return date('d M H:i', $timestamp);
+                }
+                $date = new DateTime();
+                $date->setTimestamp($timestamp);
+            } 
+            // Cek jika input adalah string tanggal
+            else if (is_string($datetime)) {
+                $date = new DateTime($datetime);
+            } 
+            // Format tidak dikenali
+            else {
+                return 'waktu tidak valid';
+            }
+            
+            $now = new DateTime();
+            $diff = $now->diff($date);
+
+            if ($diff->d < 1) {
+                if ($diff->h < 1) {
+                    if ($diff->i < 1) return 'baru saja';
+                    return $diff->i . ' menit lalu';
+                }
+                return $diff->h . ' jam lalu';
+            }
+            
+            return $date->format('d M H:i');
+        } catch (Exception $e) {
+            log_message('error', 'Error time_elapsed_string: ' . $e->getMessage());
+            return 'waktu tidak valid';
+        }
+    }
 }
+    }
 }

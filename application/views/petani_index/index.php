@@ -677,7 +677,151 @@
                 border-top-left-radius: 15px;
                 border-top-right-radius: 15px;
             }
+             @keyframes slideIn {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
+
+     .profile-container {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(30, 126, 52, 0.15) 100%);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border: 1px solid rgba(40, 167, 69, 0.2);
+        }
+        
+        .profile-header-section {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-avatar-lg {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #fff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 48px;
+            margin: 0 auto 20px;
+            border: 5px solid rgba(255,255,255,0.3);
+        }
+        
+        .profile-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .info-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .info-card h4 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.25rem;
+        }
+        
+        .info-card h4 i {
+            font-size: 24px;
+            color: var(--primary);
+        }
+        
+        .profile-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .profile-table th,
+        .profile-table td {
+            padding: 14px 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        
+        .profile-table th {
+            font-weight: 600;
+            color: #495057;
+            width: 40%;
+        }
+        
+        .profile-table tr:not(:last-child) {
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .profile-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 40px;
+            gap: 20px;
+        }
+        
+        .stat-icon-small {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .info-badge {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 5px;
+        }
+        
+        /* Animasi */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .profile-container {
+            animation: fadeIn 0.6s ease-out;
+        }
+}
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>

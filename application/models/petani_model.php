@@ -106,4 +106,44 @@ class Petani_model extends CI_Model {
         $this->db->where('id_petani', $id_petani);
         return $this->db->update('petani', $data);
     }
+
+    public function get_profile($id_petani) {
+        $stats = array();
+
+        // Hitung jumlah permintaan aktif
+        $this->db->select('COUNT(*) as total');
+        $this->db->from('penawaran');
+        $this->db->join('permintaan', 'penawaran.id_permintaan = permintaan.id_permintaan');
+        $this->db->where('penawaran.id_petani', $id_petani);
+        $this->db->where('permintaan.status', 'open');
+        $this->db->where('penawaran.status', 'pending');
+        $query = $this->db->get();
+        $stats['permintaan_aktif'] = $query->row()->total;
+
+        // Hitung jumlah penawaran
+        $this->db->select('COUNT(*) as total');
+        $this->db->from('penawaran');
+        $this->db->where('id_petani', $id_petani);
+        $query = $this->db->get();
+        $stats['total_penawaran'] = $query->row()->total;
+
+        // Hitung penugasan kurir
+        $this->db->select('COUNT(*) as total');
+        $this->db->from('penugasan');
+        $this->db->join('penawaran', 'penugasan.id_penawaran = penawaran.id_penawaran');
+        $this->db->where('penawaran.id_petani', $id_petani);
+        $this->db->where('penugasan.status', 'approved');
+        $query = $this->db->get();
+        $stats['penugasan_kurir'] = $query->row()->total;
+
+        // Hitung jenis komoditas
+        $this->db->select('COUNT(DISTINCT permintaan.id_komoditas) as total');
+        $this->db->from('penawaran');
+        $this->db->join('permintaan', 'penawaran.id_permintaan = permintaan.id_permintaan');
+        $this->db->where('penawaran.id_petani', $id_petani);
+        $query = $this->db->get();
+        $stats['jenis_komoditas'] = $query->row()->total;
+
+        return $stats;
+    }
 }

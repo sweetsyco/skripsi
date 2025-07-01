@@ -53,11 +53,11 @@ class Dashboard extends CI_Controller {
             : 0;
         }
         
-        foreach ($permintaan as $p) {
-            if ($p->status == 'closed') {
-                $permintaan_selesai++;
-            }
-        }
+        // foreach ($permintaan as $p) {
+        //     if ($p->status == 'closed') {
+        //         $permintaan_selesai++;
+        //     }
+        // }
 
 		// var_dump($permintaan);
 		// die();

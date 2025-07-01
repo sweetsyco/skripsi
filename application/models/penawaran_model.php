@@ -116,7 +116,7 @@ class Penawaran_model extends CI_Model {
             pm.sisa_permintaan,
             k.nama_komoditas,
             d.nama_perusahaan,
-            pm.jumlah AS jumlah_permintaan
+            pm.jumlah AS jumlah_permintaan,
         ');
         $this->db->from('penawaran pn');
         $this->db->join('permintaan pm', 'pn.id_permintaan = pm.id_permintaan');
@@ -206,4 +206,24 @@ public function get_komoditas_detail($id_penawaran) {
     $this->db->where('penawaran.id_penawaran', $id_penawaran);
     return $this->db->get()->row();
 }
+public function count_penawaran_dikirim($id_petani) {
+        $this->db->where('id_petani', $id_petani);
+        return $this->db->count_all_results('penawaran');
+    }
+
+    // Hitung jumlah penawaran yang diterima (status accepted) oleh petani
+    public function count_penawaran_diterima($id_petani) {
+        $this->db->where('id_petani', $id_petani);
+        $this->db->where('status', 'accepted');
+        return $this->db->count_all_results('penawaran');
+    }
+
+    // Hitung total transaksi (sum harga) dari penawaran yang diterima
+    public function total_transaksi($id_petani) {
+        $this->db->select_sum('harga');
+        $this->db->where('id_petani', $id_petani);
+        $this->db->where('status', 'accepted');
+        $result = $this->db->get('penawaran')->row();
+        return $result->harga ? $result->harga : 0;
+    }
 }
