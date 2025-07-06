@@ -16,7 +16,7 @@
                 <i class="fas fa-history"></i>
                 <span>Riwayat</span>
             </a>
-            <a href="#">
+            <a href="<?= base_url('kurir/profile')?>">
                 <i class="fas fa-user-circle"></i>
                 <span>Profil</span>
             </a>

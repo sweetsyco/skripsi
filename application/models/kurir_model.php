@@ -148,6 +148,31 @@ public function complete_assignment($id_penugasan, $data) {
     $this->db->where('id_penugasan', $id_penugasan);
     return $this->db->update('penugasan');
 }
+public function get_by_pengguna($id_pengguna) {
+        $this->db->select('kurir.*, pengguna.nama, pengguna.email, pengguna.dibuat_pada, distributor.nama_perusahaan');
+        $this->db->from('kurir');
+        $this->db->join('pengguna', 'pengguna.id_pengguna = kurir.id_pengguna');
+        $this->db->join('distributor', 'distributor.id_distributor = kurir.id_distributor');
+        $this->db->where('kurir.id_pengguna', $id_pengguna);
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+
+    public function update($id_kurir, $data) {
+        $this->db->where('id_kurir', $id_kurir);
+        return $this->db->update('kurir', $data);
+    }
+
+    public function count_penugasan_aktif($id_kurir) {
+        $this->db->where('id_kurir', $id_kurir);
+        $this->db->where('status', 'pick up'); 
+        return $this->db->count_all_results('penugasan');
+    }
+
+    public function count_total_penugasan($id_kurir) {
+        $this->db->where('id_kurir', $id_kurir);
+        return $this->db->count_all_results('penugasan');
+    }
 
     
 }
