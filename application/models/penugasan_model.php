@@ -207,4 +207,42 @@ public function start_pickup($id_penugasan) {
     return $this->db->update('penugasan', $data);
 }
 
+    public function get_penugasan_by_kurir($id_kurir) {
+        $this->db->select('penugasan.*, penawaran.jumlah, komoditas.nama_komoditas, pengguna.nama as nama_petani, distributor.nama_perusahaan'); // HAPUS KOMA BERLEBIH
+        $this->db->from('penugasan');
+        $this->db->join('penawaran', 'penugasan.id_penawaran = penawaran.id_penawaran');
+        $this->db->join('permintaan', 'penawaran.id_permintaan = permintaan.id_permintaan');
+        $this->db->join('komoditas', 'permintaan.id_komoditas = komoditas.id_komoditas');
+        $this->db->join('petani', 'penawaran.id_petani = petani.id_petani');
+        $this->db->join('pengguna', 'petani.id_pengguna = pengguna.id_pengguna');
+        $this->db->join('distributor', 'permintaan.id_distributor = distributor.id_distributor');
+        $this->db->where('penugasan.id_kurir', $id_kurir);
+        return $this->db->get()->result_array();
+    }
+
+    public function get_penugasan_by_id($id_penugasan) {
+        $this->db->where('id_penugasan', $id_penugasan);
+        return $this->db->get('penugasan')->row_array();
+    }
+
+    public function update_penugasan($id_penugasan, $data) {
+        $this->db->where('id_penugasan', $id_penugasan);
+        $this->db->update('penugasan', $data);
+    }
+    public function get_riwayat_by_kurir($id_kurir) {
+        $this->db->select('p.*, k.nama_komoditas, k.satuan, pen.jumlah, pen.harga, peng.nama AS nama_petani, d.nama_perusahaan');
+        $this->db->from('penugasan p');
+        $this->db->join('penawaran pen', 'p.id_penawaran = pen.id_penawaran');
+        $this->db->join('permintaan perm', 'pen.id_permintaan = perm.id_permintaan');
+        $this->db->join('komoditas k', 'perm.id_komoditas = k.id_komoditas');
+        $this->db->join('petani pt', 'pen.id_petani = pt.id_petani');
+        $this->db->join('pengguna peng', 'pt.id_pengguna = peng.id_pengguna');
+        $this->db->join('distributor d', 'perm.id_distributor = d.id_distributor');
+        $this->db->where('p.id_kurir', $id_kurir);
+        $this->db->where('p.status', 'approved'); 
+        $this->db->order_by('p.ditugaskan_pada', 'DESC');
+        
+        return $this->db->get()->result();
+    }
+
 }

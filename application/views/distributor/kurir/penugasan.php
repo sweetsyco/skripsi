@@ -138,7 +138,7 @@
                                    class="btn btn-sm btn-info mb-2 w-100">
                                     <i class="fas fa-info-circle me-1"></i> Detail
                                     </a>
-                                    <?php if($t['status'] == 'pending'): ?>
+                                    <?php if($t['status'] == 'pick up'): ?>
                                         <div class="d-flex flex-wrap gap-2">
                                             <a href="<?= site_url('distributor/penugasan/update_status/'.$t['id_penugasan'].'/approved') ?>" 
                                                class="btn btn-sm btn-success action-btn">

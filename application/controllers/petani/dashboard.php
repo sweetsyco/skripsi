@@ -18,6 +18,7 @@ class Dashboard extends CI_Controller {
         
         // Ambil data petani
         $data['petani'] = $this->petani_model->get_petani_data($id_pengguna);
+        $data['title'] = "Dashboard Petani - AgriConnect";
         
         // Pastikan petani ditemukan
         if (!$data['petani']) {
@@ -40,7 +41,7 @@ class Dashboard extends CI_Controller {
         }
         
         // Load view dashboard
-        $this->load->view('petani_index/index');
+        $this->load->view('petani_index/index',$data);
         $this->load->view('petani_index/header');
         $this->load->view('petani/dashboard', $data);
         $this->load->view('petani_index/footer');

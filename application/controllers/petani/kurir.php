@@ -15,6 +15,7 @@ class Kurir extends CI_Controller {
     public function index() {
         $id_pengguna = $this->session->userdata('user_id');
         $data['petani'] = $this->petani_model->get_petani_data($id_pengguna);
+        $data['title'] = "List Penugasan - AgriConnect";
         
         if(empty($data['petani'])) {
             show_error('Profil petani tidak ditemukan. Silakan lengkapi profil Anda.', 404);
@@ -23,7 +24,7 @@ class Kurir extends CI_Controller {
         $id_petani = $data['petani']['id_petani'];
         $data['penugasan'] = $this->penugasan_model->get_penugasan_by_petani($id_petani);
         
-        $this->load->view('petani_index/index');
+        $this->load->view('petani_index/index',$data);
         $this->load->view('petani_index/header');
         $this->load->view('petani/kurir/index', $data);
         $this->load->view('petani_index/kurir_footer');

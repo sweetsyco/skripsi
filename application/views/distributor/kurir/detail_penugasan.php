@@ -223,9 +223,6 @@
                             <button class="btn btn-outline-secondary mr-2" disabled>
                                 <i class="fas fa-info-circle me-1"></i> Penugasan Selesai
                             </button>
-                            <a href="#" class="btn btn-primary">
-                                <i class="fas fa-print me-1"></i> Cetak Laporan
-                            </a>
                         <?php endif; ?>
                     </div>
                 </div>

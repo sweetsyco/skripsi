@@ -90,7 +90,7 @@
                         <h5 class="modal-title" id="tambahKurirModalLabel">Tambah Kurir Baru</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="<?= site_url('distributor/proses_tambah_kurir') ?>" method="post">
+                    <form action="<?= site_url('distributor/kurir/proses_tambah_kurir') ?>" method="post">
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label class="form-label">Nama Lengkap</label>

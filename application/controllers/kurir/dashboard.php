@@ -18,6 +18,7 @@ class Dashboard extends CI_Controller {
         $id_pengguna = $this->session->userdata('user_id');
         $id_kurir = $this->session->userdata('id_kurir');
         $data['kurir'] = $this->Kurir_model->get_kurir_by_user_id($id_pengguna);
+        $data['title'] = "Dashboard Kurir - AgriConnect";
         
         if (!$data['kurir']) {
             // Handle jika data kurir tidak ditemukan
@@ -32,11 +33,11 @@ class Dashboard extends CI_Controller {
         // Ambil statistik
         $stats = $this->Kurir_model->get_assignment_stats($id_kurir);
         $data['total_penugasan'] = $stats['total'];
-        $data['dalam_proses'] = $stats['pick_up'];
+        $data['dalam_proses'] = $stats['pick up'];
         $data['selesai'] = $stats['approved'];
         $data['menunggu'] = $stats['pending'];
         
-        $this->load->view('kurir_index/index');
+        $this->load->view('kurir_index/index',$data);
         $this->load->view('kurir_index/header');
         $this->load->view('kurir/dashboard', $data);
         $this->load->view('kurir_index/footer');
@@ -88,51 +89,4 @@ class Dashboard extends CI_Controller {
     $this->load->view('kurir_index/footer');
 }
 
-public function proses_verifikasi($id_penugasan) {
-    $this->load->library('upload');
-    
-    // Konfigurasi upload
-    $config['upload_path'] = './uploads/bukti_pengiriman/';
-    $config['allowed_types'] = 'jpg|jpeg|png';
-    $config['max_size'] = 2048; // 2MB
-    $config['encrypt_name'] = true;
-    
-    $this->upload->initialize($config);
-    
-    $foto_bukti = '';
-    
-    // Proses upload foto
-    if ($this->upload->do_upload('foto_bukti')) {
-        $upload_data = $this->upload->data();
-        $foto_bukti = $upload_data['file_name'];
-    } else {
-        // Jika upload gagal, simpan pesan error
-        $error = $this->upload->display_errors();
-        $this->session->set_flashdata('error', $error);
-        redirect('kurir/verifikasi/'.$id_penugasan);
-    }
-    
-    // Data untuk disimpan
-    $data = [
-        'foto_bukti' => $foto_bukti,
-        'catatan' => $this->input->post('catatan')
-    ];
-    
-    // Proses verifikasi
-    if ($this->Kurir_model->complete_assignment($id_penugasan, $data)) {
-        // Tambahkan aktivitas
-        $this->load->model('Aktivitas_model');
-        $this->Aktivitas_model->add_activity(
-            $this->session->userdata('user_id'),
-            'verifikasi',
-            'Pengiriman ' . $data['tugas']->nama_komoditas . ' diverifikasi'
-        );
-        
-        $this->session->set_flashdata('success', 'Pengiriman berhasil diverifikasi!');
-    } else {
-        $this->session->set_flashdata('error', 'Gagal memverifikasi pengiriman.');
-    }
-    
-    redirect('kurir');
-}
 }

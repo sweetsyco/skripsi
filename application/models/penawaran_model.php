@@ -226,4 +226,20 @@ public function count_penawaran_dikirim($id_petani) {
         $result = $this->db->get('penawaran')->row();
         return $result->harga ? $result->harga : 0;
     }
+    public function getByIdWithDetails($id_penawaran) {
+    $this->db->select('penawaran.*, 
+                      permintaan.id_distributor, 
+                      distributor.nama_perusahaan, 
+                      distributor.alamat AS alamat_distributor,
+                      komoditas.nama_komoditas,
+                      petani.alamat AS alamat_petani');
+    $this->db->from('penawaran');
+    $this->db->join('permintaan', 'permintaan.id_permintaan = penawaran.id_permintaan');
+    $this->db->join('distributor', 'distributor.id_distributor = permintaan.id_distributor');
+    $this->db->join('komoditas', 'komoditas.id_komoditas = permintaan.id_komoditas');
+    $this->db->join('petani', 'petani.id_petani = penawaran.id_petani');
+    $this->db->where('penawaran.id_penawaran', $id_penawaran);
+    return $this->db->get()->row_array();
 }
+}
+

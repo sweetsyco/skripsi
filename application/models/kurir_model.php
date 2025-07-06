@@ -73,7 +73,7 @@ class Kurir_model extends CI_Model {
         $this->db->join('petani', 'petani.id_petani = penawaran.id_petani');
         $this->db->join('pengguna', 'pengguna.id_pengguna = petani.id_pengguna');
         $this->db->where('penugasan.id_kurir', $id_kurir);
-        $this->db->where_in('penugasan.status', ['pending', 'pick_up']); 
+        $this->db->where_in('penugasan.status', ['pending', 'pick up']); 
         return $this->db->get()->result();
     }
 
@@ -81,7 +81,7 @@ class Kurir_model extends CI_Model {
     public function get_assignment_stats($id_kurir) {
         $stats = [
             'total' => 0,
-            'pick_up' => 0, 
+            'pick up' => 0, 
             'approved' => 0, 
             'pending' => 0
         ];
@@ -95,8 +95,8 @@ class Kurir_model extends CI_Model {
         foreach ($result as $row) {
             $stats['total'] += $row->count;
             switch ($row->status) {
-                case 'pick_up': // status baru
-                    $stats['pick_up'] = $row->count;
+                case 'pick up': // status baru
+                    $stats['pick up'] = $row->count;
                     break;
                 case 'approved': // status final
                     $stats['approved'] = $row->count;

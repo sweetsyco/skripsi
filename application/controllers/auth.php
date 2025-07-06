@@ -141,7 +141,8 @@ class Auth extends CI_Controller {
         $id_distributor = null;
         $id_petani = null;
         $id_kurir = null;
-        $nama_perusahaan = null; // Tambahkan variabel untuk nama perusahaan
+        $nama_perusahaan = null;
+        $alamat = null;
 
         // Ambil ID spesifik berdasarkan peran
         switch ($user->peran) {
@@ -154,7 +155,10 @@ class Auth extends CI_Controller {
                 break;
             case 'petani':
                 $petani = $this->petani_model->getByUserId($user->id_pengguna);
-                $id_petani = $petani ? $petani->id_petani : null;
+                if ($petani) {
+                    $id_petani = $petani->id_distributor;
+                    $alamat = $petani->alamat; // Ambil nama perusahaan
+                }
                 break;
             case 'kurir':
                 $kurir = $this->kurir_model->getByUserId($user->id_pengguna);

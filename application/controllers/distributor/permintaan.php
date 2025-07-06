@@ -76,6 +76,8 @@ class Permintaan extends CI_Controller {
             }
         }
         
+        $total_permintaan = $this->Permintaan_model->count_by_distributor($id_distributor);
+        $permintaan_selesai = $this->Permintaan_model->count_closed_by_distributor($id_distributor);
         // Dapatkan statistik komoditas dari model
         $komoditas_stats = $this->Permintaan_model->get_komoditas_stats($id_distributor);
         
@@ -89,7 +91,10 @@ class Permintaan extends CI_Controller {
             'pagination_links' => $this->pagination->create_links(),
             'total_rows' => $config['total_rows'],
             'per_page' => $config['per_page'],
-            'current_page' => $page
+            'current_page' => $page,
+            'total_permintaan' => $total_permintaan,
+            'permintaan_selesai' => $permintaan_selesai,
+            'komoditas_stats' => $komoditas_stats,
             ];
 
             $this->load->view('distributor_index/index',$data);

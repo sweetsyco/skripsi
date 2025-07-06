@@ -59,15 +59,11 @@
             <h2 class="h4">Aksi Cepat</h2>
         </div>
         <div class="actions-container">
-            <a href="#" class="action-card">
+            <a href="<?php echo site_url('petani/penawaran/buat')?>" class="action-card">
                 <i class="fas fa-plus-circle"></i>
                 <h4>Buat Penawaran</h4>
             </a>
-            <a href="#" class="action-card">
-                <i class="fas fa-seedling"></i>
-                <h4>Tambah Komoditas</h4>
-            </a>
-            <a href="#" class="action-card">
+            <a href="<?php echo site_url('petani/kurir')?>" class="action-card">
                 <i class="fas fa-truck"></i>
                 <h4>Verifikasi Pengiriman</h4>
             </a>

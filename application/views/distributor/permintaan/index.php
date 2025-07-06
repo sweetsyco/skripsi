@@ -103,72 +103,64 @@
                         </div>
                     
                     <div class="card mt-4">
-                        <div class="card-header">
-                            <h3 class="mb-0">Statistik Permintaan</h3>
+    <div class="card-header">
+        <h3 class="mb-0">Statistik Permintaan</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="d-flex align-items-center p-3 border rounded-3 mb-3">
+                    <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-3 me-3">
+                        <i class="fas fa-clipboard-list fa-2x"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-0"><?= $total_permintaan ?></h4>
+                        <p class="mb-0 text-muted">Total Permintaan</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex align-items-center p-3 border rounded-3 mb-3">
+                    <div class="bg-success bg-opacity-10 text-success p-3 rounded-3 me-3">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-0"><?= $permintaan_selesai ?></h4>
+                        <p class="mb-0 text-muted">Permintaan Selesai</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <h5>Distribusi Komoditas</h5>
+            <div class="row">
+                <?php foreach ($komoditas_stats as $stat): ?>
+                    <div class="col-md-4 mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span><?= $stat->nama_komoditas ?></span>
+                            <span><?= $stat->jumlah_permintaan ?> permintaan</span>
                         </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="d-flex align-items-center p-3 border rounded-3 mb-3">
-                                        <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-3 me-3">
-                                            <i class="fas fa-clipboard-list fa-2x"></i>
-                                        </div>
-                                        <div>
-                                            <h4 class="mb-0">2</h4>
-                                            <p class="mb-0 text-muted">Total Permintaan</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="d-flex align-items-center p-3 border rounded-3 mb-3">
-                                        <div class="bg-success bg-opacity-10 text-success p-3 rounded-3 me-3">
-                                            <i class="fas fa-check-circle fa-2x"></i>
-                                        </div>
-                                        <div>
-                                            <h4 class="mb-0">0</h4>
-                                            <p class="mb-0 text-muted">Permintaan Selesai</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="mt-4">
-                                <h5>Distribusi Komoditas</h5>
-                                <div class="row">
-                                    <div class="col-md-4 mb-3">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <span>Padi</span>
-                                            <span>1 permintaan</span>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar" 
-                                                role="progressbar" 
-                                                style="width: 50%; background-color: #d342ab"
-                                                aria-valuenow="50" 
-                                                aria-valuemin="0" 
-                                                aria-valuemax="100">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <span>Jagung</span>
-                                            <span>1 permintaan</span>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar" 
-                                                role="progressbar" 
-                                                style="width: 50%; background-color: #79d22b"
-                                                aria-valuenow="50" 
-                                                aria-valuemin="0" 
-                                                aria-valuemax="100">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="progress">
+                            <?php 
+                            $percentage = ($total_permintaan > 0) 
+                                ? ($stat->jumlah_permintaan / $total_permintaan) * 100 
+                                : 0;
+                            ?>
+                            <div class="progress-bar" 
+                                role="progressbar" 
+                                style="width: <?= $percentage ?>%; background-color: <?= generate_color($stat->nama_komoditas) ?>"
+                                aria-valuenow="<?= $percentage ?>" 
+                                aria-valuemin="0" 
+                                aria-valuemax="100">
                             </div>
                         </div>
                     </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</div>
                 </div>
             </div>
     <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">

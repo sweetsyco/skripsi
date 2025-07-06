@@ -85,12 +85,14 @@ $route['petani/dashboard'] = 'petani/dashboard/index';
 $route['petani/penawaran'] = 'petani/penawaran';
 $route['petani/penawaran/buat'] = 'petani/penawaran/create';
 $route['petani/profil'] = 'petani/profile';
+$route['petani/penawaran/get_detail_json/(:num)'] = 'petani/penawaran/get_detail_json/$1';
 
 
 
 $route['kurir/dashboard'] = 'kurir/dashboard';
 $route['kurir/mulai_penugasan/(:num)'] = 'kurir/mulai_penugasan/$1';
 $route['kurir/verifikasi_penugasan/(:num)'] = 'kurir/verifikasi_penugasan/$1';
-$route['kurir/verifikasi'] = 'Kurir/verifikasi/';
-$route['kurir/verifikasi/(:num)'] = 'Kurir/verifikasi/$1';
-$route['kurir/proses_verifikasi/(:num)'] = 'Kurir/proses_verifikasi/$1';
+
+$route['kurir/verifikasi'] = 'kurir/verifikasi';
+$route['kurir/verifikasi/detail/(:num)'] = 'kurir/verifikasi/detail/$1';
+$route['kurir/verifikasi/upload_bukti/(:num)'] = 'kurir/verifikasi/upload_bukti/$1';

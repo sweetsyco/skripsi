@@ -75,22 +75,7 @@
                         </thead>
                         <tbody>
                             <?php foreach ($penawaran as $p): ?>
-                            <tr data-komoditas="<?= htmlspecialchars($p['nama_komoditas']) ?>"
-                                data-distributor="<?= htmlspecialchars($p['nama_perusahaan']) ?>"
-                                data-jumlah="<?= $p['jumlah'] ?>"
-                                data-harga="<?= $p['harga'] ?>"
-                                data-status="<?= $p['status'] ?>"
-                                data-tanggal="<?= date('d M Y', strtotime($p['dibuat_pada'])) ?>">
-                                <script>
-        console.log({
-            komoditas: "<?= $p['nama_komoditas'] ?>",
-            distributor: "<?= $p['nama_perusahaan'] ?>",
-            jumlah: <?= $p['jumlah'] ?>,
-            harga: <?= $p['harga'] ?>,
-            status: "<?= $p['status'] ?>",
-            tanggal: "<?= date('d M Y', strtotime($p['dibuat_pada'])) ?>"
-        });
-        </script>
+                            <tr>
                                 <td data-id="<?= $p['id_penawaran'] ?>">
                                     <div class="d-flex align-items-center">
                                         <i class="fas fa-seedling me-2 text-success"></i>
@@ -132,9 +117,11 @@
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     <?php elseif ($p['status'] == 'accepted'): ?>
-                                        <button class="action-btn btn btn-sm btn-success" data-bs-toggle="tooltip" title="Download Kontrak">
+                                        
+                                        <a href="<?= site_url('petani/penawaran/buat_surat_perjanjian/'.$p['id_penawaran']) ?>" 
+                                        class="btn btn-sm btn-success">
                                             <i class="fas fa-file-download"></i>
-                                        </button>
+                                        </a>
                                     <?php else: ?>
                                         <button class="action-btn btn btn-sm btn-danger btn-delete" data-id="<?= $p['id_penawaran'] ?>" data-komoditas="<?= htmlspecialchars($p['nama_komoditas']) ?>" data-distributor="<?= htmlspecialchars($p['nama_perusahaan']) ?>">
                                             <i class="fas fa-trash"></i>
@@ -205,59 +192,59 @@
             </div>
         </div>
     </div>
-    
+   
     <!-- Modal Detail Penawaran -->
-    <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Detail Penawaran</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <div class="detail-box">
-                                <h6 class="fw-bold mb-3">Informasi Penawaran</h6>
-                                <div class="detail-item">
-                                    <span>Komoditas:</span>
-                                    <span id="detail-komoditas"></span>
-                                </div>
-                                <div class="detail-item">
-                                    <span>Distributor:</span>
-                                    <span id="detail-distributor"></span>
-                                </div>
-                                <div class="detail-item">
-                                    <span>Jumlah:</span>
-                                    <span id="detail-jumlah"></span>
-                                </div>
-                                <div class="detail-item">
-                                    <span>Harga:</span>
-                                    <span id="detail-harga"></span>
-                                </div>
+<div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detail Penawaran</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="detail-box">
+                            <h6 class="fw-bold mb-3">Informasi Penawaran</h6>
+                            <div class="detail-item">
+                                <span>Komoditas:</span>
+                                <span id="detail-komoditas"></span>
+                            </div>
+                            <div class="detail-item">
+                                <span>Distributor:</span>
+                                <span id="detail-distributor"></span>
+                            </div>
+                            <div class="detail-item">
+                                <span>Jumlah:</span>
+                                <span id="detail-jumlah"></span>
+                            </div>
+                            <div class="detail-item">
+                                <span>Harga:</span>
+                                <span id="detail-harga"></span>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="detail-box">
-                                <h6 class="fw-bold mb-3">Status & Tanggal</h6>
-                                <div class="detail-item">
-                                    <span>Status:</span>
-                                    <span id="detail-status" class="badge"></span>
-                                </div>
-                                <div class="detail-item">
-                                    <span>Tanggal Dibuat:</span>
-                                    <span id="detail-tanggal"></span>
-                                </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="detail-box">
+                            <h6 class="fw-bold mb-3">Status & Tanggal</h6>
+                            <div class="detail-item">
+                                <span>Status:</span>
+                                <span id="detail-status" class="badge"></span>
+                            </div>
+                            <div class="detail-item">
+                                <span>Tanggal Dibuat:</span>
+                                <span id="detail-tanggal"></span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Modal Edit Penawaran -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">

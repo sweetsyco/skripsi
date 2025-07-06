@@ -5,11 +5,7 @@
             setTimeout(function() {
                 $('.alert').alert('close');
             }, 5000);
-            
-            // Simulasi upload gambar
-            $('.verification-image').click(function() {
-                alert('Membuka dialog pilih gambar');
-            });
+        
         });
     </script>
 </body>

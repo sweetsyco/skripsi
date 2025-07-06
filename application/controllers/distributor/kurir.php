@@ -28,9 +28,10 @@ class Kurir extends CI_Controller {
         $id_kurir = $this->session->userdata('id_kurir');
         $data['penugasan'] = $this->kurir_model->get_penugasan($id_kurir);
         
-        $this->load->view('templates/header');
+        $this->load->view('distributor_index/index',$data);
+        $this->load->view('distributor_index/header');
         $this->load->view('kurir/penugasan', $data);
-        $this->load->view('templates/footer');
+        $this->load->view('distributor_index/kurir_footer');
     }
 
     public function detail_penugasan($id) {
@@ -41,9 +42,11 @@ class Kurir extends CI_Controller {
             show_404();
         }
         
-        $this->load->view('templates/header');
+        
+        $this->load->view('distributor_index/index',$data);
+        $this->load->view('distributor_index/header');
         $this->load->view('kurir/detail_penugasan', $data);
-        $this->load->view('templates/footer');
+        $this->load->view('distributor_index/kurir_footer');
     }
 
     public function update_status() {
@@ -55,16 +58,6 @@ class Kurir extends CI_Controller {
         
         redirect('kurir/detail_penugasan/'.$id_penugasan);
     }
-
-    public function profil() {
-        $id_kurir = $this->session->userdata('id_kurir');
-        $data['profil'] = $this->kurir_model->get_profil($id_kurir);
-        
-        $this->load->view('templates/header');
-        $this->load->view('kurir/profil', $data);
-        $this->load->view('templates/footer');
-    }
-
     
     public function edit_kurir($id_kurir) {
     $id_distributor = $this->session->userdata('id_distributor');
@@ -74,9 +67,10 @@ class Kurir extends CI_Controller {
         show_404();
     }
     
-    $this->load->view('templates/header');
+    $this->load->view('distributor_index/index',$data);
+    $this->load->view('distributor_index/header');
     $this->load->view('distributor/edit_kurir', $data);
-    $this->load->view('templates/footer');
+    $this->load->view('distributor_index/kurir_footer');
 }
 
 public function proses_tambah_kurir() {
@@ -116,7 +110,7 @@ public function proses_tambah_kurir() {
             $this->db->insert('kurir', $data_kurir);
             
             $this->session->set_flashdata('success', 'Kurir berhasil ditambahkan');
-            redirect('distributor/kurir');
+            redirect('distributor/kurir/tambah');
         }
     }
 

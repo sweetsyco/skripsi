@@ -40,64 +40,67 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Script untuk modal detail dan hapus
-    // Handler untuk tombol detail
+   
     if (document.querySelector('.btn-detail')) {
         document.querySelectorAll('.btn-detail').forEach(button => {
             button.addEventListener('click', function() {
-                const row = this.closest('tr');
-                if (!row) return;
+                const idPenawaran = this.getAttribute('data-id');
+                const button = this;
+                console.log(idPenawaran);
                 
-                const status = row.dataset.status;
-                const harga = row.dataset.harga;
+                // Tampilkan loading
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                button.disabled = true;
                 
-                // Tentukan kelas CSS berdasarkan status
-                let statusClass = 'bg-secondary';
-                if (status === 'pending') statusClass = 'bg-warning';
-                else if (status === 'accepted') statusClass = 'bg-success';
-                else if (status === 'rejected') statusClass = 'bg-danger';
-                
-                // Format harga menjadi Rupiah
-                const hargaNum = parseFloat(harga);
-                const hargaFormatted = isNaN(hargaNum) 
-                    ? 'Rp 0' 
-                    : 'Rp ' + hargaNum.toLocaleString('id-ID');
-                
-                // Isi data ke dalam modal
-                if (document.getElementById('detail-komoditas')) {
-                    document.getElementById('detail-komoditas').textContent = row.dataset.komoditas || '-';
-                }
-                if (document.getElementById('detail-distributor')) {
-                    document.getElementById('detail-distributor').textContent = row.dataset.distributor || '-';
-                }
-                if (document.getElementById('detail-jumlah')) {
-                    document.getElementById('detail-jumlah').textContent = (row.dataset.jumlah || '0') + ' kg';
-                }
-                if (document.getElementById('detail-harga')) {
-                    document.getElementById('detail-harga').textContent = hargaFormatted;
-                }
-                
-                const statusElement = document.getElementById('detail-status');
-                if (statusElement) {
-                    statusElement.textContent = status ? status.charAt(0).toUpperCase() + status.slice(1) : '-';
-                    statusElement.className = 'badge ' + statusClass;
-                }
-                
-                if (document.getElementById('detail-tanggal')) {
-                    document.getElementById('detail-tanggal').textContent = row.dataset.tanggal || '-';
-                }
-                if (document.getElementById('detail-update')) {
-                    document.getElementById('detail-update').textContent = row.dataset.update || '-';
-                }
-                if (document.getElementById('detail-catatan')) {
-                    document.getElementById('detail-catatan').textContent = row.dataset.catatan || 'Tidak ada catatan tambahan';
-                }
+                // AJAX request
+                fetch(`<?= site_url('petani/penawaran/get_detail_json/') ?>${idPenawaran}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Kembalikan tombol ke semula
+                        button.innerHTML = '<i class="fas fa-eye"></i>';
+                        button.disabled = false;
+                        
+                        if (data.success) {
+                            const penawaran = data.data;
+                            
+                            // Tentukan kelas CSS berdasarkan status
+                            let statusClass = 'bg-secondary';
+                            if (penawaran.status === 'pending') statusClass = 'bg-warning';
+                            else if (penawaran.status === 'accepted') statusClass = 'bg-success';
+                            else if (penawaran.status === 'rejected') statusClass = 'bg-danger';
+                            
+                            // Isi data ke dalam modal
+                            document.getElementById('detail-komoditas').textContent = penawaran.komoditas;
+                            document.getElementById('detail-distributor').textContent = penawaran.distributor;
+                            document.getElementById('detail-jumlah').textContent = penawaran.jumlah;
+                            document.getElementById('detail-harga').textContent = penawaran.harga;
+                            
+                            const statusElement = document.getElementById('detail-status');
+                            statusElement.textContent = penawaran.status.charAt(0).toUpperCase() + penawaran.status.slice(1);
+                            statusElement.className = 'badge ' + statusClass;
+                            
+                            document.getElementById('detail-tanggal').textContent = penawaran.tanggal;
 
-                // Tampilkan modal
-                const modal = document.getElementById('detailModal');
-                if (modal) {
-                    new bootstrap.Modal(modal).show();
-                }
+                            // Tampilkan modal
+                            const modal = new bootstrap.Modal(document.getElementById('detailModal'));
+                            modal.show();
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data.error || 'Gagal mengambil data detail'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        button.innerHTML = '<i class="fas fa-eye"></i>';
+                        button.disabled = false;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Terjadi kesalahan saat mengambil data'
+                        });
+                    });
             });
         });
     }

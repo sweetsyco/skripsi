@@ -73,7 +73,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h3>Penugasan Aktif</h3>
-                        <a href="" class="btn btn-sm btn-action">
+                        <a href="<?= site_url('kurir/verifikasi/')?>" class="btn btn-sm btn-action">
                             <i class="fas fa-list"></i> Lihat Semua
                         </a>
                     </div>
@@ -124,7 +124,7 @@
                 <!-- Form verifikasi hanya ditampilkan jika ada tugas dalam proses pengiriman -->
                 <?php 
                     $tugas_verifikasi = array_filter($penugasan_aktif, function($tugas) {
-                        return $tugas->status == 'approved';
+                        return $tugas->status == 'pick up';
                     });
                 ?>
                 
@@ -152,8 +152,8 @@
                                     <input type="text" class="form-control" value="<?= $tugas_verif->alamat_distributor ?>" readonly>
                                 </div>
                                 
-                                <a href="<?= base_url('kurir/verifikasi/'.$tugas_verif->id_penugasan) ?>" class="btn-action w-100 mt-3">
-                                    <i class="fas fa-check-circle"></i> Lengkapi Verifikasi
+                                <a href="<?= base_url('kurir/verifikasi/upload_bukti/'.$tugas_verif->id_penugasan) ?>" class="btn-action w-100 mt-3">
+                                    <i class="fas fa-check-circle"></i> Upload Bukti
                                 </a>
                             </div>
                         </div>

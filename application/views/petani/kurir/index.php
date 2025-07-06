@@ -49,6 +49,8 @@
                                         $badge_class = 'bg-success';
                                     } elseif ($status == 'rejected') {
                                         $badge_class = 'bg-danger';
+                                    } elseif ($status == 'pick up') {
+                                        $badge_class = 'bg-warning';
                                     }
                                     ?>
                                     <span class="badge <?= $badge_class ?>"><?= ucfirst($status) ?></span>
