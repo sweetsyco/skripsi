@@ -116,9 +116,9 @@ class Penawaran_model extends CI_Model {
             pm.sisa_permintaan,
             k.nama_komoditas,
             d.nama_perusahaan,
-            pm.jumlah AS jumlah_permintaan,
-            pm.harga_maks
-        ');
+            pm.harga_maks,
+            pm.jumlah AS jumlah_permintaan
+            ');
         $this->db->from('penawaran pn');
         $this->db->join('permintaan pm', 'pn.id_permintaan = pm.id_permintaan');
         $this->db->join('komoditas k', 'pm.id_komoditas = k.id_komoditas');

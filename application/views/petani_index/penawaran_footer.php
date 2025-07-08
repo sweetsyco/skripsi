@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const id = this.dataset.id;
                 const komoditas = this.dataset.komoditas;
                 const distributor = this.dataset.distributor;
-                const hargaMax = this.dataset.hargaMax; 
+                const hargaMax = this.dataset.harga_max; 
                 const jumlah = this.dataset.jumlah;
                 const harga = this.dataset.harga;
                 
@@ -157,6 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('edit-hargamaks').value = hargaMax;
                 document.getElementById('edit-jumlah').value = jumlah;
                 document.getElementById('edit-harga').value = harga;
+                console.log(hargaMax);
                 
                 
                 const hargaInput = document.getElementById('edit-harga');

@@ -70,7 +70,6 @@ class Komoditas extends CI_Controller {
     }
 
     public function hapus($id) {
-    // Cek apakah komoditas digunakan di tabel permintaan
     if ($this->Komoditas_model->is_used_in_permintaan($id)) {
         $this->session->set_flashdata('error', 'Komoditas tidak dapat dihapus karena masih terkait dengan data permintaan.');
     } else {

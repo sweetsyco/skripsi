@@ -77,15 +77,13 @@ class Permintaan_model extends CI_Model {
         $this->db->join('komoditas', 'komoditas.id_komoditas = permintaan.id_komoditas');
         $this->db->join('distributor', 'distributor.id_distributor = permintaan.id_distributor');
         $this->db->where('permintaan.status', 'open');
-        // Hapus baris berikut karena tidak ada kolom tanggal_penutupan
-        // $this->db->where('permintaan.tanggal_penutupan >=', date('Y-m-d'));
         return $this->db->get()->result_array();
     }
 
     public function get_permintaan_by_id($id_permintaan) {
         $this->db->select('permintaan.*, 
                         komoditas.nama_komoditas, 
-                        distributor.nama_perusahaan as nama_distributor'); // Perbaikan disini
+                        distributor.nama_perusahaan as nama_distributor'); 
         $this->db->from('permintaan');
         $this->db->join('komoditas', 'komoditas.id_komoditas = permintaan.id_komoditas');
         $this->db->join('distributor', 'distributor.id_distributor = permintaan.id_distributor');

@@ -148,12 +148,12 @@
                 
                 <!-- Buttons Section -->
                 <div class="d-grid gap-3 mt-4">
-                    <button class="btn btn-action">
+                    <a href="" class="btn btn-action">
                         <i class="fas fa-book"></i> Panduan Petani
-                    </button>
-                    <button class="btn btn-action secondary">
+                    </a>
+                    <a href="http://wa.me/+6282268382866" class="btn btn-action secondary">
                         <i class="fas fa-headset"></i> Dukungan Teknis
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

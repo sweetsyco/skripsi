@@ -18,7 +18,7 @@ class Penawaran extends CI_Controller {
         if(empty($data['petani'])) {
             show_error('Profil petani tidak ditemukan. Silakan lengkapi profil Anda.', 404);
         }
-        $id_petani = $data['petani']['id_petani'];
+        $id_petani = $this->session->userdata('id_petani');
 
         $data['penawaran'] = $this->penawaran_model->get_penawaran_by_petani($id_petani);
         $status_counts = $this->penawaran_model->get_status_counts($id_petani);
@@ -46,10 +46,10 @@ class Penawaran extends CI_Controller {
             
             $id_petani = $data['petani']['id_petani'];
 
-            // Load model permintaan
+            
             $this->load->model('permintaan_model');
             
-            // Jika tidak ada id_permintaan, tampilkan halaman pemilihan permintaan
+            
             if(empty($id_permintaan)) {
                 $data['permintaan'] = $this->permintaan_model->get_active_permintaan();
                 $data['title'] = "List Permintaan - AgriConnect";
@@ -59,7 +59,7 @@ class Penawaran extends CI_Controller {
                 $this->load->view('petani_index/footer');
                 return;
             }
-
+            
             $data['permintaan'] = $this->permintaan_model->get_permintaan_by_id($id_permintaan);
 
             if(empty($data['permintaan'])) {
@@ -89,11 +89,13 @@ class Penawaran extends CI_Controller {
                 ];
 
                 if($id_penawaran = $this->penawaran_model->create_penawaran($data_penawaran)){
-                     $aktivitas_distributor = [
+                    $permintaan = $this->permintaan_model->get_permintaan_by_id($id_permintaan);
+                    $penawaran = $this->penawaran_model->get_penawaran_by_id($id_penawaran, $id_petani);
+                    $aktivitas_distributor = [
                     'id_pengguna' => $this->session->userdata('user_id'),
                     'id_distributor' => $this->session->userdata('id_distributor'),
                     'jenis' => 'Penawaran',
-                    'pesan' => "Penawaran baru untuk Permintaan {$permintaan['nama_komoditas']} Sebanyak {$permintaan['jumlah']} kg",
+                    'pesan' => "Penawaran baru untuk Permintaan {$permintaan['nama_komoditas']} Sebanyak {$penawaran['jumlah']} kg",
                     'waktu' => date('Y-m-d H:i:s')
                     ];
                     $this->db->insert('aktivitas', $aktivitas_distributor);

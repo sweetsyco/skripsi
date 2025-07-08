@@ -7,7 +7,6 @@ class Kurir extends CI_Controller {
         parent::__construct();
         $this->load->model('kurir_model');
         $this->load->model('distributor_model');
-        // Cek login dan peran
         if (!$this->session->userdata('logged_in') || $this->session->userdata('peran') != 'distributor') {
             redirect('auth/login');
         }
@@ -61,8 +60,6 @@ class Kurir extends CI_Controller {
 
 public function proses_tambah_kurir() {
         $id_distributor = $this->session->userdata('id_distributor');
-        
-        // Validasi form
         $this->form_validation->set_rules('nama', 'Nama', 'required');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
         $this->form_validation->set_rules('no_kendaraan', 'No Kendaraan', 'required');
@@ -72,7 +69,6 @@ public function proses_tambah_kurir() {
         if ($this->form_validation->run() == FALSE) {
             $this->tambah_kurir();
         } else {
-            // Data untuk tabel pengguna
             $data_pengguna = [
                 'nama' => $this->input->post('nama'),
                 'email' => $this->input->post('email'),
@@ -80,11 +76,8 @@ public function proses_tambah_kurir() {
                 'peran' => 'kurir'
             ];
             
-            // Simpan data pengguna
             $this->db->insert('pengguna', $data_pengguna);
             $id_pengguna = $this->db->insert_id();
-            
-            // Data untuk tabel kurir
             $data_kurir = [
                 'id_pengguna' => $id_pengguna,
                 'id_distributor' => $id_distributor,
@@ -94,7 +87,6 @@ public function proses_tambah_kurir() {
                 'cakupan_area' => $this->input->post('cakupan_area')
             ];
             
-            // Simpan data kurir
             $this->db->insert('kurir', $data_kurir);
             
             $this->session->set_flashdata('success', 'Kurir berhasil ditambahkan');
@@ -106,8 +98,6 @@ public function proses_tambah_kurir() {
     $id_kurir = $this->input->post('id_kurir');
     $id_distributor = $this->session->userdata('id_distributor');
     
-    
-    // Dapatkan detail kurir
     $kurir = $this->kurir_model->get_detail_kurir($id_kurir, $id_distributor);
     
     if (!$kurir) {
@@ -115,14 +105,12 @@ public function proses_tambah_kurir() {
         redirect('Distributor/kurir/create');
     }
     
-    // Validasi form
     $this->form_validation->set_rules('nama', 'Nama', 'required');
     $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
     $this->form_validation->set_rules('no_kendaraan', 'No Kendaraan', 'required');
     $this->form_validation->set_rules('cakupan_area', 'Cakupan Area', 'required');
     
     if ($this->form_validation->run() == FALSE) {
-        // Jika validasi gagal, tampilkan halaman edit lagi
         $data['kurir'] = $kurir;
         $data['error'] = validation_errors();
         
@@ -130,31 +118,26 @@ public function proses_tambah_kurir() {
         $this->load->view('distributor/kurir/create', $data);
         
     } else {
-        // Data untuk tabel pengguna
         $data_pengguna = [
             'nama' => $this->input->post('nama'),
             'email' => $this->input->post('email')
         ];
         
-        // Jika password diisi, update password
         $password = $this->input->post('password');
         if (!empty($password)) {
             $data_pengguna['kata_sandi'] = password_hash($password, PASSWORD_DEFAULT);
         }
         
-        // Update data pengguna
         $this->db->where('id_pengguna', $kurir->id_pengguna);
         $this->db->update('pengguna', $data_pengguna);
         
-        // Data untuk tabel kurir
         $data_kurir = [
             'no_telepon' => $this->input->post('no_telp'),
             'alamat' => $this->input->post('alamat'),
             'no_kendaraan' => $this->input->post('no_kendaraan'),
             'cakupan_area' => $this->input->post('cakupan_area')
         ];
-        
-        // Update data kurir
+       
         $this->db->where('id_kurir', $id_kurir);
         $this->db->update('kurir', $data_kurir);
         
@@ -165,7 +148,6 @@ public function proses_tambah_kurir() {
     public function delete_kurir($id_kurir) {
         $id_distributor = $this->session->userdata('id_distributor');
         
-        // Pastikan kurir tersebut milik distributor yang login
         $kurir = $this->kurir_model->get_detail_kurir($id_kurir, $id_distributor);
         
         if (!$kurir) {
@@ -173,7 +155,6 @@ public function proses_tambah_kurir() {
             redirect('distributor/kurir/create');
         }
         
-        // Hapus kurir
         if ($this->kurir_model->delete_kurir($id_kurir)) {
             $this->session->set_flashdata('success', 'Kurir berhasil dihapus');
         } else {

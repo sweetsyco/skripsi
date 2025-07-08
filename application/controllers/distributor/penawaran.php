@@ -73,7 +73,6 @@ class Penawaran extends CI_Controller {
             if ($permintaan) {
                 $sisa_baru = $permintaan['sisa_permintaan'] - $penawaran['jumlah'];
                 
-                // Pastikan tidak minus
                 if ($sisa_baru < 0) {
                     throw new Exception("Jumlah penawaran melebihi sisa permintaan");
                 }

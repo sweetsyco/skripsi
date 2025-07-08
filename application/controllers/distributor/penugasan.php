@@ -6,7 +6,6 @@ class Penugasan extends CI_Controller {
         parent::__construct();
         $this->load->model('penugasan_model');
         $this->load->model('kurir_model');
-        // Pastikan hanya distributor yang bisa akses
         if ($this->session->userdata('peran') != 'distributor') {
             redirect('login');
         }

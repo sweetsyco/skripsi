@@ -7,13 +7,10 @@ class Laporan extends CI_Controller {
         $this->load->model('d_report_model');
         $this->load->model('distributor_model');
         $this->load->helper('url');
-        
-        // Pastikan hanya distributor yang bisa akses
         if($this->session->userdata('peran') != 'distributor') {
             redirect('login');
         }
         
-        // Ambil id_distributor dari session
         $this->id_distributor = $this->session->userdata('id_distributor');
     }
 
@@ -47,8 +44,7 @@ class Laporan extends CI_Controller {
     }
 
     public function export_pdf() {
-        // Logika ekspor PDF
-        // Ambil parameter filter
+       
         $filter = [
             'start_date' => $this->input->get('start_date'),
             'end_date' => $this->input->get('end_date'),
@@ -82,22 +78,17 @@ class Laporan extends CI_Controller {
         // Konfigurasi PDF
         $dompdf = new \Dompdf\Dompdf();
         
-        // Buat HTML untuk PDF
         $html = $this->load->view('distributor/laporan/export_pdf', $data, TRUE);
         
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'landscape');
         $dompdf->render();
         
-        // Output PDF (langsung download)
         $dompdf->stream("laporan_permintaan.pdf", array("Attachment" => 1));
     }
 
     public function export_excel() {
-    // Load autoloader Composer
-    // require_once FCPATH . 'vendor/autoload.php';
-
-    // Pastikan tidak ada output sebelum ini
+   
     ob_clean();
     ob_start();
 
@@ -108,17 +99,15 @@ class Laporan extends CI_Controller {
         'id_komoditas' => $this->input->get('id_komoditas')
     ];
 
-    // Siapkan filter untuk model
     $filter = [
         'start_date' => !empty($get_params['start_date']) ? date('Y-m-d', strtotime($get_params['start_date'])) : null,
         'end_date' => !empty($get_params['end_date']) ? date('Y-m-d', strtotime($get_params['end_date'])) : null,
-        'status' => ($get_params['status'] == 'all') ? null : $get_params['status'], // Perbaikan di sini
+        'status' => ($get_params['status'] == 'all') ? null : $get_params['status'], 
         'id_komoditas' => ($get_params['id_komoditas'] != '') ? $get_params['id_komoditas'] : null
     ];
 
-    // Ambil data laporan
     $laporan = $this->d_report_model->get_laporan_permintaan($this->id_distributor, $filter);
-    // Format periode untuk ditampilkan
+    
     $periode = "Semua Periode";
     if (!empty($get_params['start_date']) && !empty($get_params['end_date'])) {
         $start = date('d M Y', strtotime($get_params['start_date']));
@@ -132,16 +121,13 @@ class Laporan extends CI_Controller {
         $periode = "Periode: Sampai $end";
     }
     
-    // Dapatkan nama komoditas
     $komoditas_name = 'Semua Komoditas';
     if (!empty($get_params['id_komoditas'])) {
         $komoditas_name = $this->d_report_model->get_komoditas_name($get_params['id_komoditas']);
     }
 
-    // Status untuk ditampilkan
     $status_display = ($get_params['status'] == 'all') ? 'Semua Status' : $get_params['status'];
 
-    // Informasi distributor
     $nama_distributor = $this->session->userdata('nama_distributor') ?? 'N/A';
     $id_distributor = $this->session->userdata('id_distributor');
 

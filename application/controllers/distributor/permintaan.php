@@ -6,7 +6,7 @@ class Permintaan extends CI_Controller {
     public function __construct() {
         parent::__construct();
         
-        // Cek login dan peran
+        
         if (!$this->session->userdata('logged_in') || $this->session->userdata('peran') !== 'distributor') {
             redirect('auth/login');
         }
@@ -27,7 +27,7 @@ class Permintaan extends CI_Controller {
         $this->load->library('pagination');
         $config['base_url'] = base_url('distributor/permintaan/index');
         $config['total_rows'] = $this->Permintaan_model->count_by_distributor($id_distributor);
-        $config['per_page'] = 10; // Jumlah item per halaman
+        $config['per_page'] = 10; 
         $config['uri_segment'] = 4;
 
         $config['full_tag_open'] = '<ul class="pagination mb-0">';
@@ -48,19 +48,16 @@ class Permintaan extends CI_Controller {
         
         $this->pagination->initialize($config);
         
-        // Ambil halaman saat ini dari segmen URI
+        
         $page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
         
-        // Load model dengan pagination
+        
         $permintaan = $this->Permintaan_model->get_with_komoditas_paginated(
             $id_distributor, 
             $config['per_page'], 
             $page
         );
-        // Load model
-        //$permintaan = $this->Permintaan_model->get_with_komoditas($id_distributor);
         
-        // Hitung statistik
         foreach ($permintaan as $p) {
         $p->progres = ($p->jumlah > 0) 
             ? (($p->jumlah - $p->sisa_permintaan) / $p->jumlah) * 100 
@@ -78,7 +75,6 @@ class Permintaan extends CI_Controller {
         
         $total_permintaan = $this->Permintaan_model->count_by_distributor($id_distributor);
         $permintaan_selesai = $this->Permintaan_model->count_closed_by_distributor($id_distributor);
-        // Dapatkan statistik komoditas dari model
         $komoditas_stats = $this->Permintaan_model->get_komoditas_stats($id_distributor);
         
         $data = [
@@ -109,7 +105,7 @@ class Permintaan extends CI_Controller {
         $data = [
             'title' => 'Buat Permintaan Baru',
             'komoditas' => $this->Komoditas_model->get_all(),
-            'validation_errors' => validation_errors() // Untuk menampilkan error validasi jika ada
+            'validation_errors' => validation_errors()
         ];
         $this->load->view('distributor_index/index',$data);
         $this->load->view('distributor_index/header');
@@ -121,19 +117,19 @@ class Permintaan extends CI_Controller {
         $id_distributor = $this->session->userdata('id_distributor');
         $id_pengguna = $this->session->userdata('user_id');
         
-        // Set rules validasi
+       
         $this->form_validation->set_rules('id_komoditas', 'Komoditas', 'required|integer');
         $this->form_validation->set_rules('jumlah', 'Jumlah', 'required|numeric|greater_than[0]');
         $this->form_validation->set_rules('harga_maks', 'Harga Maksimum', 'required|numeric|greater_than[0]');
         
         if ($this->form_validation->run() == FALSE) {
-            // Jika validasi gagal, kembali ke form dengan error
+           
             $this->create();
         } else {
-            // Dapatkan data komoditas untuk aktivitas
+            
             $komoditas = $this->Komoditas_model->get($this->input->post('id_komoditas'));
             
-            // Siapkan data untuk disimpan
+            
             $data = [
                 'id_distributor' => $id_distributor,
                 'id_komoditas' => $this->input->post('id_komoditas'),
@@ -213,7 +209,6 @@ class Permintaan extends CI_Controller {
     // Hitung total yang sudah diterima
     $total_diterima = 0;
     foreach ($penawaran as $p) {
-        // PERBAIKAN 1: Gunakan properti yang benar
         $jumlah = isset($p->jumlah_penawaran) ? $p->jumlah_penawaran : (isset($p->jumlah) ? $p->jumlah : 0);
         
         if ($p->status == 'accepted') {

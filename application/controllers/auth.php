@@ -13,26 +13,20 @@ class Auth extends CI_Controller {
     }
 
     public function login() {
-    // Set rules validasi
     $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
     $this->form_validation->set_rules('password', 'Password', 'required');
 
     if ($this->form_validation->run() == FALSE) {
         $this->load->view('auth/login');
     } else {
-        // Ambil data dari form
         $email = $this->input->post('email');
         $password = $this->input->post('password');
-        
-        // Cek pengguna di database
+
         $user = $this->pengguna_model->getPenggunaByEmail($email);
         
         if ($user) {
-            // Verifikasi password
             if (password_verify($password, $user->kata_sandi)) {
-                // AMBIL ID SPESIFIK BERDASARKAN PERAN
             $this->setUserSession($user);
-             // Redirect berdasarkan peran
             $this->redirectToDashboard($user->peran);
                 
             } else {
@@ -48,13 +42,10 @@ class Auth extends CI_Controller {
 
      public function register() {
         $data['distributors'] = $this->distributor_model->get_all();
-        // Set rules validasi
         $this->form_validation->set_rules('nama', 'Nama Lengkap', 'required');
         $this->form_validation->set_rules('email', 'Email', 'required|is_unique[pengguna.email]');
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
         $this->form_validation->set_rules('peran', 'Peran', 'required');
-        
-        // Validasi khusus peran
         $peran = $this->input->post('peran');
         if ($peran == 'distributor') {
             $this->form_validation->set_rules('nama_perusahaan', 'Nama Perusahaan', 'required');
@@ -72,22 +63,17 @@ class Auth extends CI_Controller {
         }
 
         if ($this->form_validation->run() == FALSE) {
-            // Jika validasi gagal, tampilkan form kembali
             $this->load->view('auth/register', $data);
         } else {
-            // Data untuk tabel pengguna
             $data = array(
                 'nama' => $this->input->post('nama'),
                 'email' => $this->input->post('email'),
                 'kata_sandi' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
                 'peran' => $this->input->post('peran')
             );
-            
-            // Simpan data pengguna
             $user_id = $this->pengguna_model->insertPengguna($data);
             
             if ($user_id) {
-                // Data tambahan berdasarkan peran
                 $role = $this->input->post('peran');
                 
                 if ($role == 'distributor') {
@@ -114,14 +100,11 @@ class Auth extends CI_Controller {
                         'no_kendaraan' => $this->input->post('no_kendaraan'),
                         'cakupan_area' => $this->input->post('cakupan_area')
                     );
-                    
-                    // Jika distributor_id diperlukan, bisa ditambahkan di sini
                     $kurir_data['id_distributor'] = $this->input->post('id_distributor');
                     
                     $this->kurir_model->insert($kurir_data);
                 }
-                
-                // Set pesan sukses
+               
                 $this->session->set_flashdata('success', 'Registrasi berhasil! Silakan login.');
                 redirect('auth/login');
             } else {
@@ -137,14 +120,11 @@ class Auth extends CI_Controller {
     }
 
     private function setUserSession($user) {
-    // Inisialisasi variabel ID
         $id_distributor = null;
         $id_petani = null;
         $id_kurir = null;
         $nama_perusahaan = null;
         $alamat = null;
-
-        // Ambil ID spesifik berdasarkan peran
         switch ($user->peran) {
             case 'distributor':
                 $distributor = $this->distributor_model->getByUserId($user->id_pengguna);
@@ -200,7 +180,4 @@ class Auth extends CI_Controller {
                 break;
         }
     }
-
-    // Di controller Auth
-// 
 }

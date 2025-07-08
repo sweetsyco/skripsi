@@ -112,7 +112,7 @@
                                             data-distributor="<?= htmlspecialchars($p['nama_perusahaan']) ?>"
                                             data-jumlah="<?= $p['jumlah'] ?>"
                                             data-harga="<?= $p['harga'] ?>"
-                                            data-hargaMax="<?= $p['harga_maks'] ?>">
+                                            data-harga_max="<?= $p['harga_maks'] ?>">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button class="btn-action btn-action-delete btn-delete" data-id="<?= $p['id_penawaran'] ?>" data-komoditas="<?= htmlspecialchars($p['nama_komoditas']) ?>" data-distributor="<?= htmlspecialchars($p['nama_perusahaan']) ?>">

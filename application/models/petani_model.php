@@ -77,7 +77,7 @@ class Petani_model extends CI_Model {
 
     
     public function get_recent_activities() {
-        $this->db->where_in('jenis', ['penawaran', 'verifikasi']); 
+        $this->db->where_in('jenis', ['verifikasi','permintaan']); 
         $this->db->order_by('waktu', 'DESC');
         $this->db->limit(5);
         $query = $this->db->get('aktivitas');

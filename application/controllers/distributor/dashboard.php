@@ -22,14 +22,12 @@ class Dashboard extends CI_Controller {
     {
         parent::__construct();
         $this->load->model('Permintaan_model');
-        // $this->load->model('Petani_model');
         $this->load->model('Penawaran_model');
         $this->load->model('Penugasan_model');
         $this->load->model('Kurir_model');
         $this->load->model('Aktivitas_model');
         $this->load->library('form_validation');
         
-        // Check login
         if(!$this->session->userdata('logged_in') || $this->session->userdata('peran') != 'distributor') {
             redirect('auth/login');
         }
@@ -43,24 +41,13 @@ class Dashboard extends CI_Controller {
             10, 
             1
         );
-        // Load model
-        //$permintaan = $this->Permintaan_model->get_with_komoditas($id_distributor);
         
-        // Hitung statistik
         foreach ($permintaan as $p) {
         $p->progres = ($p->jumlah > 0) 
             ? (($p->jumlah - $p->sisa_permintaan) / $p->jumlah) * 100 
             : 0;
         }
         
-        // foreach ($permintaan as $p) {
-        //     if ($p->status == 'closed') {
-        //         $permintaan_selesai++;
-        //     }
-        // }
-
-		// var_dump($permintaan);
-		// die();
 
 		$activity = $this->Aktivitas_model->get_recent_activities($id_distributor);
         
