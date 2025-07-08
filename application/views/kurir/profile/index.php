@@ -61,6 +61,14 @@
                     <div class="detail-value"><?= $kurir['email'] ?></div>
                 </div>
                 <div class="detail-row">
+                    <div class="detail-label">No Telepon</div>
+                    <div class="detail-value"><?= $kurir['no_telepon'] ?></div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Alamat</div>
+                    <div class="detail-value"><?= $kurir['alamat'] ?></div>
+                </div>
+                <div class="detail-row">
                     <div class="detail-label">No. Kendaraan</div>
                     <div class="detail-value"><?= $kurir['no_kendaraan'] ?></div>
                 </div>
@@ -107,21 +115,15 @@
                     <input type="email" class="form-control" value="<?= $kurir['email'] ?>" readonly>
                     <small class="text-muted">Email tidak dapat diubah</small>
                 </div>
-                
+
                 <div class="form-group">
-                    <label class="form-label">No. Kendaraan</label>
-                    <input type="text" class="form-control" name="no_kendaraan" value="<?= $kurir['no_kendaraan'] ?>">
-                    <?php if(form_error('no_kendaraan')): ?>
-                        <div class="error-message"><?= form_error('no_kendaraan') ?></div>
-                    <?php endif; ?>
+                    <label class="form-label">No Telepon</label>
+                    <input type="tel" class="form-control" name="no_telepon" value="<?= $kurir['no_telepon'] ?>">
                 </div>
-                
+
                 <div class="form-group">
-                    <label class="form-label">Cakupan Area</label>
-                    <input type="text" class="form-control" name="cakupan_area" value="<?= $kurir['cakupan_area'] ?>">
-                    <?php if(form_error('cakupan_area')): ?>
-                        <div class="error-message"><?= form_error('cakupan_area') ?></div>
-                    <?php endif; ?>
+                    <label class="form-label">Alamat</label>
+                    <input type="text" class="form-control" name="alamat" value="<?= $kurir['alamat'] ?>">
                 </div>
                 
                 <div class="form-group">
@@ -139,6 +141,7 @@
                         <div class="error-message"><?= form_error('cakupan_area') ?></div>
                     <?php endif; ?>
                 </div>
+                
                 
                 <div class="form-group">
                     <label class="form-label">Kata Sandi Baru</label>

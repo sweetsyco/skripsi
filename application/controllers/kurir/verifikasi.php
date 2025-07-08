@@ -69,10 +69,11 @@ class Verifikasi extends CI_Controller {
                 $data = array(
                     'foto_bukti' => $foto_bukti,
                     'catatan' => $this->input->post('catatan'),
-                    'status' => 'completed'
+                    'waktu_bukti' => date('Y-m-d H:i:s'),
+                    'status' => 'pending',
                 );
 
-                $this->Penugasan_model->update_penugasan($id_penugasan, $data);
+                $this->Penugasan_model->upload_bukti($id_penugasan, $data);
 
                 $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Bukti berhasil diupload! Penugasan selesai.</div>');
                 redirect('kurir/verifikasi');

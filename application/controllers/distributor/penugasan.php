@@ -5,6 +5,7 @@ class Penugasan extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('penugasan_model');
+        $this->load->model('kurir_model');
         // Pastikan hanya distributor yang bisa akses
         if ($this->session->userdata('peran') != 'distributor') {
             redirect('login');
@@ -15,16 +16,13 @@ class Penugasan extends CI_Controller {
         $id_distributor = $this->session->userdata('id_distributor');
     $data['title'] = "Manajemen Kurir";
     
-    // Ambil data penugasan
     $data['penugasan'] = $this->penugasan_model->get_penugasan_by_distributor($id_distributor);
     
-    // Ambil penawaran yang diterima dan belum ditugaskan
     $data['penawaran'] = $this->penugasan_model->get_accepted_penawaran($id_distributor);
     
-    // Ambil kurir
     $data['kurir'] = $this->penugasan_model->get_kurir_by_distributor($id_distributor);
    
-    // Tampilkan pesan jika tidak ada penawaran yang tersedia
+    
     if (empty($data['penawaran'])) {
         $this->session->set_flashdata('info', 'Tidak ada penawaran yang tersedia untuk ditugaskan. Semua penawaran sudah ditugaskan.');
     }
@@ -49,7 +47,7 @@ class Penugasan extends CI_Controller {
     $data = array(
         'id_penawaran' => $this->input->post('id_penawaran'),
         'id_kurir' => $this->input->post('id_kurir'),
-        'status' => 'pick_up',
+        'status' => 'pick up',
         'ditugaskan_pada' => date('Y-m-d H:i:s')
     );
 
@@ -60,9 +58,9 @@ class Penugasan extends CI_Controller {
     $penawaran = $this->penugasan_model->get_penawaran_detail($id_penawaran);
     $kurir = $this->penugasan_model->get_kurir_detail($id_kurir);
     
-    // Buat penugasan
+   
     if ($id_penugasan = $this->penugasan_model->create_penugasan($data)) {
-        // Aktivitas untuk distributor (pembuat)
+        
         $aktivitas_distributor = [
             'id_pengguna' => $this->session->userdata('user_id'),
             'id_distributor' => $this->session->userdata('id_distributor'),
@@ -91,18 +89,21 @@ class Penugasan extends CI_Controller {
 
  
     public function detail($id_penugasan) {
+    $this->load->helper('file');
     $id_distributor = $this->session->userdata('id_distributor');
     
-    // Ambil data penugasan
     $data['penugasan'] = $this->penugasan_model->get_penugasan_detail($id_penugasan);
+    $data['bukti'] = $this->kurir_model->get_penugasan_detail($id_penugasan);
     $data['title'] = "Manajemen Kurir";
     
-    // Validasi kepemilikan
+    
     if (!$data['penugasan'] || $data['penugasan']['id_distributor'] != $id_distributor) {
         show_404();
     }
+    if (!empty($data['penugasan']['foto_bukti'])) {
+        $data['penugasan']['foto_bukti_url'] = base_url('uploads/bukti/' . $data['penugasan']['foto_bukti']);
+    }
     
-    // Ambil data distributor dari session
     $data['distributor'] = [
         'nama_perusahaan' => $this->session->userdata('nama_perusahaan'),
         'alamat' => $this->session->userdata('alamat_distributor'),
@@ -122,36 +123,33 @@ public function update_status($id_penugasan, $status) {
     $id_distributor = $this->session->userdata('id_distributor');
     $id_pengguna = $this->session->userdata('id_pengguna');
     
-    // Validasi status yang diizinkan
-    $allowed_status = ['approved','pick_up', 'rejected'];
+    $allowed_status = ['approved','pick up', 'rejected'];
     if (!in_array($status, $allowed_status)) {
         $this->session->set_flashdata('error', 'Status tidak valid');
         redirect('distributor/penugasan');
     }
     
-    // Dapatkan detail penugasan untuk validasi kepemilikan
     $penugasan = $this->penugasan_model->get_penugasan_detail($id_penugasan);
     
-    // Validasi kepemilikan
     if (!$penugasan || $penugasan['id_distributor'] != $id_distributor) {
         $this->session->set_flashdata('error', 'Penugasan tidak ditemukan atau tidak memiliki akses');
         redirect('distributor/penugasan');
     }
     
-    // Validasi status saat ini harus pending
+    
     if ($penugasan['status'] != 'pending') {
         $this->session->set_flashdata('error', 'Status penugasan sudah diproses sebelumnya');
         redirect('distributor/penugasan');
     }
     
-    // Update status
+    
     if ($this->penugasan_model->update_status($id_penugasan, $status)) {
-        // Buat pesan aktivitas
+        
         $pesan = "Penugasan #{$id_penugasan} untuk ";
         $pesan .= "{$penugasan['nama_komoditas']} ({$penugasan['jumlah']} kg) ";
         $pesan .= "telah diubah menjadi " . ($status == 'approved' ? 'Disetujui' : 'Ditolak');
         
-        // Simpan aktivitas untuk distributor
+        
         $aktivitas_distributor = [
             'id_pengguna' => $id_pengguna,
             'id_distributor' => $id_distributor,
@@ -161,7 +159,7 @@ public function update_status($id_penugasan, $status) {
         ];
         $this->db->insert('aktivitas', $aktivitas_distributor);
         
-        // Simpan aktivitas untuk kurir
+        
         $aktivitas_kurir = [
             'id_pengguna' => $penugasan['id_pengguna_kurir'],
             'id_distributor' => $id_distributor,
@@ -178,4 +176,93 @@ public function update_status($id_penugasan, $status) {
     
     redirect('distributor/penugasan');
 }
+
+public function view_bukti($id_penugasan) {
+    $id_distributor = $this->session->userdata('id_distributor');
+    $penugasan = $this->kurir_model->get_penugasan_detail($id_penugasan);
+    
+    if (!$penugasan || $penugasan['id_distributor'] != $id_distributor) {
+        show_404();
+    }
+    
+    if (empty($penugasan['foto_bukti'])) {
+        $this->session->set_flashdata('error', 'Bukti foto tidak tersedia');
+        redirect('distributor/penugasan');
+    }
+
+   
+    redirect($penugasan['foto_bukti_url']);
+}
+
+public function approve($id_penugasan) {
+    $this->_validate_access($id_penugasan);
+    
+   
+    $catatan = $this->input->post('catatan');
+    
+    if ($this->penugasan_model->update_status($id_penugasan, 'approved', $catatan)) {
+        $this->_log_activity($id_penugasan, 'approved', 'Penugasan disetujui');
+        $this->session->set_flashdata('success', 'Penugasan berhasil disetujui!');
+    } else {
+        $this->session->set_flashdata('error', 'Gagal menyetujui penugasan');
+    }
+    
+    redirect('distributor/penugasan/detail/' . $id_penugasan);
+}
+
+public function reject($id_penugasan) {
+    $this->_validate_access($id_penugasan);
+    
+    $catatan = $this->input->post('catatan');
+    if (empty($catatan)) {
+        $this->session->set_flashdata('error', 'Catatan penolakan wajib diisi');
+        redirect('distributor/penugasan/detail/' . $id_penugasan);
+    }
+    
+    if ($this->penugasan_model->update_status($id_penugasan, 'rejected', $catatan)) {
+        $this->_log_activity($id_penugasan, 'rejected', 'Penugasan ditolak: ' . $catatan);
+        $this->session->set_flashdata('success', 'Penugasan berhasil ditolak!');
+    } else {
+        $this->session->set_flashdata('error', 'Gagal menolak penugasan');
+    }
+    
+    redirect('distributor/penugasan/detail/' . $id_penugasan);
+}
+
+private function _validate_access($id_penugasan) {
+    if ($this->session->userdata('peran') != 'distributor') {
+        redirect('login');
+    }
+    
+    $penugasan = $this->penugasan_model->get_penugasan_detail($id_penugasan);
+    $distributor_id = $this->session->userdata('id_distributor');
+    
+    if (!$penugasan || $penugasan['id_distributor'] != $distributor_id) {
+        show_404();
+    }
+}
+
+private function _log_activity($id_penugasan, $status, $message) {
+    $penugasan = $this->penugasan_model->get_penugasan_detail($id_penugasan);
+    
+    $aktivitas_distributor = [
+        'id_pengguna' => $this->session->userdata('user_id'),
+        'id_distributor' => $this->session->userdata('id_distributor'),
+        'jenis' => 'verifikasi',
+        'pesan' => "Penugasan #$id_penugasan ({$penugasan['nama_komoditas']}) $message",
+        'waktu' => date('Y-m-d H:i:s')
+    ];
+    $this->db->insert('aktivitas', $aktivitas_distributor);
+    
+    
+    $aktivitas_kurir = [
+        'id_pengguna' => $this->session->userdata('user_id'),
+        'id_distributor' => $this->session->userdata('id_distributor'),
+        'jenis' => 'verifikasi',
+        'pesan' => "Penugasan #$id_penugasan ({$penugasan['nama_komoditas']}) $message",
+        'waktu' => date('Y-m-d H:i:s')
+    ];
+    $this->db->insert('aktivitas', $aktivitas_kurir);
+}
+
 }

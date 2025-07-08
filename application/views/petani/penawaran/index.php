@@ -51,11 +51,6 @@
                     <h3 class="h5 mb-1">Daftar Penawaran Saya</h3>
                     <p class="text-muted mb-0">Total <?= count($penawaran) ?> penawaran yang telah dibuat</p>
                 </div>
-                <div>
-                    <a href="<?= site_url('dashboard') ?>" class="btn btn-outline-secondary">
-                        <i class="fas fa-arrow-left me-1"></i> Kembali
-                    </a>
-                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -105,15 +100,22 @@
                                 </td>
                                 <td><?= date('d M Y', strtotime($p['dibuat_pada'])) ?></td>
                                 <td>
-                                    <button class="action-btn btn btn-sm btn-primary btn-detail" data-id="<?= $p['id_penawaran'] ?>">
+                                    <div class="action-buttons">
+                                    <button class="btn-action btn-action-view btn-detail" data-id="<?= $p['id_penawaran'] ?>">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                     
                                     <?php if ($p['status'] == 'pending'): ?>
-                                        <a href="<?= site_url('petani/penawaran/update_view/'.$p['id_penawaran']) ?>" class="action-btn btn btn-sm btn-warning btn-edit">
+                                        <button class="btn-action btn-action-edit btn-edit" 
+                                            data-id="<?= $p['id_penawaran'] ?>"
+                                            data-komoditas="<?= htmlspecialchars($p['nama_komoditas']) ?>"
+                                            data-distributor="<?= htmlspecialchars($p['nama_perusahaan']) ?>"
+                                            data-jumlah="<?= $p['jumlah'] ?>"
+                                            data-harga="<?= $p['harga'] ?>"
+                                            data-hargaMax="<?= $p['harga_maks'] ?>">
                                             <i class="fas fa-edit"></i>
-                                        </a>
-                                        <button class="action-btn btn btn-sm btn-danger btn-delete" data-id="<?= $p['id_penawaran'] ?>" data-komoditas="<?= htmlspecialchars($p['nama_komoditas']) ?>" data-distributor="<?= htmlspecialchars($p['nama_perusahaan']) ?>">
+                                        </button>
+                                        <button class="btn-action btn-action-delete btn-delete" data-id="<?= $p['id_penawaran'] ?>" data-komoditas="<?= htmlspecialchars($p['nama_komoditas']) ?>" data-distributor="<?= htmlspecialchars($p['nama_perusahaan']) ?>">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     <?php elseif ($p['status'] == 'accepted'): ?>
@@ -254,7 +256,7 @@
                     <h5 class="modal-title">Edit Penawaran</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="editForm" method="POST" action="<?= site_url('penawaran/edit') ?>">
+                <form id="editForm" method="POST" action="<?= site_url('petani/penawaran/update') ?>">
                     <div class="modal-body">
                         <input type="hidden" id="edit-id" name="id_penawaran">
                         <div class="mb-3">
@@ -264,7 +266,11 @@
                         <div class="mb-3">
                             <label class="form-label">Distributor</label>
                             <input type="text" class="form-control" id="edit-distributor" readonly>
+                        </div><div class="mb-3">
+                            <label class="form-label">Harga Maks</label>
+                            <input type="text" class="form-control" id="edit-hargamaks" readonly>
                         </div>
+                        <small class="text-muted">Harga maksimal yang bersedia dibayar distributor</small>
                         <div class="mb-3">
                             <label class="form-label">Jumlah (kg)</label>
                             <input type="number" class="form-control" id="edit-jumlah" name="jumlah" required>
@@ -303,3 +309,116 @@
             </div>
         </div>
     </div>
+    <style>
+.action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+
+        /* Base style untuk semua tombol aksi */
+        .btn-action {
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s;
+            text-decoration: none;
+            min-width: 36px;
+            height: 36px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        /* Tombol View */
+        .btn-action-view {
+            background-color: rgba(23, 162, 184, 0.15);
+            color: #17a2b8;
+            border-color: rgba(23, 162, 184, 0.3);
+        }
+
+        .btn-action-view:hover {
+            background-color: rgba(23, 162, 184, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Tombol Download */
+        .btn-action-download {
+            background-color: rgba(40, 167, 69, 0.15);
+            color: #28a745;
+            border-color: rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-action-download:hover {
+            background-color: rgba(40, 167, 69, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Tombol Delete */
+        .btn-action-delete {
+            background-color: rgba(220, 53, 69, 0.15);
+            color: #dc3545;
+            border-color: rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-action-delete:hover {
+            background-color: rgba(220, 53, 69, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .btn-action-edit {
+            background-color: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+            border-color: rgba(255, 193, 7, 0.3);
+        }
+
+        .btn-action-edit:hover {
+            background-color: rgba(255, 193, 7, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Penyesuaian ikon */
+        .btn-action i {
+            font-size: 16px;
+        }
+
+        /* Untuk tombol yang hanya berisi ikon */
+        .btn-action.icon-only i {
+            margin: 0;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            .action-buttons {
+                gap: 5px;
+            }
+            
+            .btn-action {
+                padding: 6px 10px;
+                font-size: 13px;
+                min-width: 32px;
+                height: 32px;
+            }
+            
+            .btn-action i {
+                font-size: 14px;
+            }
+        }
+        
+        /* Animasi untuk efek lebih halus */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .btn-action {
+            animation: fadeIn 0.3s ease-out;
+        }
+</style>

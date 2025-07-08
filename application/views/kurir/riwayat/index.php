@@ -32,7 +32,7 @@
                                 <tr>
                                     <td><?= $index + 1 ?></td>
                                     <td><?= $item->nama_komoditas ?></td>
-                                    <td><?= number_format($item->jumlah, 2) ?> <?= $item->satuan ?></td>
+                                    <td><?= number_format($item->jumlah, 0) ?> <?= $item->satuan ?></td>
                                     <td>Rp <?= number_format($item->harga, 0, ',', '.') ?></td>
                                     <td><?= $item->nama_petani ?></td>
                                     <td><?= $item->nama_perusahaan ?></td>

@@ -47,6 +47,8 @@
                                     <th>Nama</th>
                                     <th>Email</th>
                                     <th>No. Kendaraan</th>
+                                    <th>No telp</th>
+                                    <th>Alamat</th>
                                     <th>Cakupan Area</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -56,10 +58,12 @@
                                     <tr>
                                         <td><?= $k->nama ?></td>
                                         <td><?= $k->email ?></td>
+                                        <td><?= $k->no_telepon ?></td>
+                                        <td><?= $k->alamat ?></td>
                                         <td><?= $k->no_kendaraan ?></td>
                                         <td><?= $k->cakupan_area ?></td>
                                         <td>
-                                            <button class="action-btn btn-edit" 
+                                            <button class="action-btn btn-view btn-edit" 
                                                     data-bs-toggle="modal" 
                                                     data-bs-target="#editKurirModal"
                                                     data-id="<?= $k->id_kurir ?>"
@@ -69,9 +73,12 @@
                                                     data-cakupan_area="<?= $k->cakupan_area ?>">
                                                 <i class="fas fa-edit"></i> Edit
                                             </button>
-                                            <a href="#" class="action-btn btn-close ms-2">
-                                                <i class="fas fa-trash"></i> Hapus
-                                            </a>
+                                            
+                                            <a href="<?= site_url('distributor/kurir/delete_kurir/'.$k->id_kurir) ?>" 
+                                           class="action-btn btn-keluar"
+                                           onclick="return confirm('Apakah Anda yakin ingin menghapus kurir ini?');">
+                                            <i class="fas fa-trash"></i> Hapus
+                                        </a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -99,6 +106,14 @@
                             <div class="mb-3">
                                 <label class="form-label">Email</label>
                                 <input type="email" name="email" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">No Telepon</label>
+                                <input type="no_telp" name="no_telp" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">alamat</label>
+                                <input type="alamat" name="alamat" class="form-control" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Password</label>
@@ -141,6 +156,14 @@
                             <div class="mb-3">
                                 <label class="form-label">Email</label>
                                 <input type="email" name="email" id="editEmail" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">No Telepon</label>
+                                <input type="tel" name="no_telp" id="editNo" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">alamat</label>
+                                <input type="text" name="alamat" id="editAlamat" class="form-control" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Password</label>

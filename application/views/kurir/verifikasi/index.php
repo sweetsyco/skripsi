@@ -36,19 +36,16 @@
                                             <span class="badge badge-pending">Menunggu</span>
                                         <?php elseif ($p['status'] == 'pick up') : ?>
                                             <span class="badge badge-in-progress">Dalam Proses</span>
-                                        <?php elseif ($p['status'] == 'completed') : ?>
+                                        <?php elseif ($p['status'] == 'approved') : ?>
                                             <span class="badge badge-completed">Selesai</span>
+                                        <?php else :?>
+                                            <span class="badge badge-danger">Ditolak</span>
                                         <?php endif; ?>
                                     </td>
                                     <td>
                                         <a href="<?= base_url('kurir/verifikasi/detail/') . $p['id_penugasan']; ?>" class="btn btn-sm btn-view">
                                             <i class="fas fa-eye"></i> Detail
                                         </a>
-                                        <?php if ($p['status'] == 'pick up') : ?>
-                                            <a href="<?= base_url('kurir/verifikasi/upload_bukti/') . $p['id_penugasan']; ?>" class="btn btn-sm btn-verify">
-                                                <i class="fas fa-upload"></i> Upload Bukti
-                                            </a>
-                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

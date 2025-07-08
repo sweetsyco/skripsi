@@ -92,7 +92,7 @@ class Penawaran_model extends CI_Model {
     if (!empty($filters['pencarian'])) {
         $this->db->group_start();
         $this->db->like('komoditas.nama_komoditas', $filters['pencarian']);
-        $this->db->or_like('pengguna.nama', $filters['pencarian']); // Cari di nama pengguna
+        $this->db->or_like('pengguna.nama', $filters['pencarian']);
         $this->db->group_end();
     }
     
@@ -117,6 +117,7 @@ class Penawaran_model extends CI_Model {
             k.nama_komoditas,
             d.nama_perusahaan,
             pm.jumlah AS jumlah_permintaan,
+            pm.harga_maks
         ');
         $this->db->from('penawaran pn');
         $this->db->join('permintaan pm', 'pn.id_permintaan = pm.id_permintaan');

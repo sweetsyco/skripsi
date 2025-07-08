@@ -18,7 +18,7 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-4 fw-bold">Jumlah</div>
-                    <div class="col-md-8"><?= number_format($permintaan->jumlah, 2) . ' ' . $permintaan->satuan ?></div>
+                    <div class="col-md-8"><?= number_format($permintaan->jumlah, 0) . ' ' . $permintaan->satuan ?></div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-4 fw-bold">Harga Maksimum</div>
@@ -29,7 +29,7 @@
                     <div class="col-md-8">
                         <div class="progress-container">
                             <div class="progress-label">
-                                <span><?= number_format($permintaan->sisa_permintaan, 2) . ' ' . $permintaan->satuan ?></span>
+                                <span><?= number_format($permintaan->sisa_permintaan, 0) . ' ' . $permintaan->satuan ?></span>
                                 <span><?= round(($permintaan->jumlah - $permintaan->sisa_permintaan) / $permintaan->jumlah * 100, 2) ?>%</span>
                             </div>
                             <div class="progress">
@@ -63,7 +63,7 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0">Daftar Penawaran Masuk</h3>
-                <div class="text-muted">Total diterima: <?= number_format($total_diterima, 2) ?> <?= $permintaan->satuan ?></div>
+                <div class="text-muted">Total diterima: <?= number_format($total_diterima, 0) ?> <?= $permintaan->satuan ?></div>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -93,7 +93,7 @@
                                         <div class="text-muted small"><?= $p->alamat ?></div>
                                         <div class="text-muted small"><?= $p->no_telepon ?></div>
                                     </td>
-                                    <td><?= number_format($p->jumlah_penawaran, 2) . ' ' . $permintaan->satuan ?></td>
+                                    <td><?= number_format($p->jumlah_penawaran, 0) . ' ' . $permintaan->satuan ?></td>
                                     <td>Rp <?= number_format($p->harga_penawaran, 0, ',', '.') ?></td>
                                     <td><?= format_tanggal_indonesia($p->dibuat_pada) ?></td>
                                     <td>

@@ -34,20 +34,6 @@ class Kurir extends CI_Controller {
         $this->load->view('distributor_index/kurir_footer');
     }
 
-    public function detail_penugasan($id) {
-        $id_kurir = $this->session->userdata('id_kurir');
-        $data['tugas'] = $this->kurir_model->get_detail_penugasan($id, $id_kurir);
-        
-        if (!$data['tugas']) {
-            show_404();
-        }
-        
-        
-        $this->load->view('distributor_index/index',$data);
-        $this->load->view('distributor_index/header');
-        $this->load->view('kurir/detail_penugasan', $data);
-        $this->load->view('distributor_index/kurir_footer');
-    }
 
     public function update_status() {
         $id_penugasan = $this->input->post('id_penugasan');
@@ -102,6 +88,8 @@ public function proses_tambah_kurir() {
             $data_kurir = [
                 'id_pengguna' => $id_pengguna,
                 'id_distributor' => $id_distributor,
+                'no_telepon' => $this->input->post('no_telp'),
+                'alamat' => $this->input->post('alamat'),
                 'no_kendaraan' => $this->input->post('no_kendaraan'),
                 'cakupan_area' => $this->input->post('cakupan_area')
             ];
@@ -160,6 +148,8 @@ public function proses_tambah_kurir() {
         
         // Data untuk tabel kurir
         $data_kurir = [
+            'no_telepon' => $this->input->post('no_telp'),
+            'alamat' => $this->input->post('alamat'),
             'no_kendaraan' => $this->input->post('no_kendaraan'),
             'cakupan_area' => $this->input->post('cakupan_area')
         ];
@@ -172,7 +162,28 @@ public function proses_tambah_kurir() {
         redirect('Distributor/kurir/create');
     }
 }
+    public function delete_kurir($id_kurir) {
+        $id_distributor = $this->session->userdata('id_distributor');
+        
+        // Pastikan kurir tersebut milik distributor yang login
+        $kurir = $this->kurir_model->get_detail_kurir($id_kurir, $id_distributor);
+        
+        if (!$kurir) {
+            $this->session->set_flashdata('error', 'Data kurir tidak ditemukan');
+            redirect('distributor/kurir/create');
+        }
+        
+        // Hapus kurir
+        if ($this->kurir_model->delete_kurir($id_kurir)) {
+            $this->session->set_flashdata('success', 'Kurir berhasil dihapus');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus kurir');
+        }
+        
+        redirect('distributor/kurir/create');
+    }
 }
+
 
     
    

@@ -41,12 +41,12 @@
                                                 <div class="fw-bold"><?= $p->nama_komoditas ?></div>
                                                 <div class="text-muted small"><?= format_tanggal_indonesia($p->dibuat_pada) ?></div>
                                             </td>
-                                            <td><?= number_format($p->jumlah, 2) . ' ' . $p->satuan ?></td>
+                                            <td><?= number_format($p->jumlah, 0) . ' ' . $p->satuan ?></td>
                                             <td>Rp <?= number_format($p->harga_maks, 0, ',', '.') ?>/<?= $p->satuan ?></td>
                                             <td>
                                                 <div class="progress-container">
                                                     <div class="progress-label">
-                                                        <span><?= number_format($p->sisa_permintaan, 2) . ' ' . $p->satuan ?></span>
+                                                        <span><?= number_format($p->sisa_permintaan, 0) . ' ' . $p->satuan ?></span>
                                                         <span><?= round($p->progres) ?>%</span>
                                                     </div>
                                                     <div class="progress">

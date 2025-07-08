@@ -34,7 +34,7 @@
                                             <option value="<?= $p['id_penawaran'] ?>">
                                                 <?= $p['nama_komoditas'] ?> - 
                                                 <?= $p['nama_petani'] ?> - 
-                                                <?= number_format($p['jumlah'], 2) ?> kg
+                                                <?= number_format($p['jumlah'], 0) ?> kg
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -112,13 +112,12 @@
                                 </td>
                                 <td><?= $t['nama_komoditas'] ?></td>
                                 <td><?= $t['nama_petani'] ?></td>
-                                <td><?= number_format($t['jumlah'], 2) ?> kg</td>
+                                <td><?= number_format($t['jumlah'], 0) ?> kg</td>
                                 <td><?= $t['catatan'] ?: '-' ?></td>
                                 <td>
                                     <?php if ($t['foto_bukti']): ?>
-                                        <a href="<?= base_url($t['foto_bukti']) ?>" 
-                                           target="_blank" 
-                                           class="btn btn-sm btn-outline-primary">
+                                        <a href="<?= site_url('distributor/penugasan/view_bukti/'.$t['id_penugasan']) ?>" 
+                                        class="btn btn-sm btn-outline-primary">
                                             <i class="fas fa-eye me-1"></i> Lihat Bukti
                                         </a>
                                     <?php else: ?>
@@ -138,31 +137,13 @@
                                    class="btn btn-sm btn-info mb-2 w-100">
                                     <i class="fas fa-info-circle me-1"></i> Detail
                                     </a>
-                                    <?php if($t['status'] == 'pick up'): ?>
-                                        <div class="d-flex flex-wrap gap-2">
-                                            <a href="<?= site_url('distributor/penugasan/update_status/'.$t['id_penugasan'].'/approved') ?>" 
-                                               class="btn btn-sm btn-success action-btn">
-                                                <i class="fas fa-check me-1"></i> Setujui
-                                            </a>
-                                            <a href="<?= site_url('distributor/penugasan/update_status/'.$t['id_penugasan'].'/rejected') ?>" 
-                                               class="btn btn-sm btn-danger action-btn">
-                                                <i class="fas fa-times me-1"></i> Tolak
-                                            </a>
-                                        </div>
-                                    <?php else: ?>
-                                        <div class="d-flex flex-wrap gap-2">
-                                            <button class="btn btn-sm btn-outline-secondary" disabled>
-                                                <i class="fas fa-info-circle me-1"></i> Selesai
-                                            </button>
                                             <?php if($t['status'] == 'approved' && $t['foto_bukti']): ?>
-                                                <a href="<?= base_url($t['foto_bukti']) ?>" 
-                                                   target="_blank" 
-                                                   class="btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-download me-1"></i> Unduh
-                                                </a>
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <button class="btn btn-sm btn-outline-secondary" disabled>
+                                                    <i class="fas fa-info-circle me-1"></i> Selesai
+                                                </button>
                                             <?php endif; ?>
                                         </div>
-                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

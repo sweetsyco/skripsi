@@ -79,18 +79,19 @@ $route['distributor/kurir/update'] = 'distributor/kurir/proses_update_kurir';
 $route['distributor/kurir/simpan'] = 'distributor/kurir/store';
 $route['distributor/kurir/nonaktifkan/(:num)'] = 'distributor/kurir/deactivate/$1';
 $route['distributor/laporan'] = 'distributor/laporan';
+$route['distributor/profile'] = 'distributor/profile';
 
 
 $route['petani/dashboard'] = 'petani/dashboard/index';
 $route['petani/penawaran'] = 'petani/penawaran';
 $route['petani/penawaran/buat'] = 'petani/penawaran/create';
+$route['petani/kurir/detail'] = 'petani/kurir/detail';
 $route['petani/profil'] = 'petani/profile';
 $route['petani/penawaran/get_detail_json/(:num)'] = 'petani/penawaran/get_detail_json/$1';
 
 
 
 $route['kurir/dashboard'] = 'kurir/dashboard';
-$route['kurir/mulai_penugasan/(:num)'] = 'kurir/mulai_penugasan/$1';
 $route['kurir/verifikasi_penugasan/(:num)'] = 'kurir/verifikasi_penugasan/$1';
 
 $route['kurir/verifikasi'] = 'kurir/verifikasi';

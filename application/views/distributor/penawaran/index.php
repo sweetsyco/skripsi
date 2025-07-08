@@ -133,7 +133,7 @@
                                 <td><?= $counter++ ?></td>
                                 <td><?= htmlspecialchars($p['nama_komoditas'] ?? '') ?></td>
                                 <td><?= htmlspecialchars($p['nama_petani'] ?? '') ?></td>
-                                <td><?= number_format($p['jumlah'] ?? 0, 2) ?> kg</td>
+                                <td><?= number_format($p['jumlah'] ?? 0, 0) ?> kg</td>
                                 <td>Rp <?= number_format($p['harga_per_kg'] ?? 0) ?>/kg</td>
                                 <td>Rp <?= number_format($p['total_harga'] ?? 0) ?></td>
                                 <td><?= date('d M Y', strtotime($p['dibuat_pada'] ?? 'now')) ?></td>

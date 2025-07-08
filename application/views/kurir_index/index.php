@@ -242,6 +242,53 @@
             gap: 8px;
             transition: all 0.3s;
         }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Perbaiki style tombol */
+        .btn-upload {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-upload:hover {
+            background-color: #4a7a30;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(91, 145, 59, 0.3);
+        }
+
+        .btn-batal {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-batal:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+            color: white;
+        }
         
         .btn-action:hover {
             background-color: #4a7a30;
@@ -289,6 +336,10 @@
         .badge-completed {
             background-color: rgba(40, 167, 69, 0.15);
             color: #28a745;
+        }
+        .badge-danger {
+            background-color: rgba(40, 167, 69, 0.15);
+            color:rgb(240, 63, 63);
         }
         
         .action-buttons {
@@ -771,6 +822,7 @@
     color: #6c757d !important;
     font-size: 0.875em;
 }
+
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>

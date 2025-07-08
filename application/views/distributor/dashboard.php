@@ -118,7 +118,7 @@
 						<?php foreach ($permintaan as $index => $p): ?>
 							<div class="progress-container">
 								<div class="progress-label">
-									<span><?= $p->nama_komoditas ?> - <?= number_format($p->jumlah, 2) . ' ' . $p->satuan ?></span>
+									<span><?= $p->nama_komoditas ?> - <?= number_format($p->jumlah, 0) . ' ' . $p->satuan ?></span>
 									<span><?= $p->progres ?>%</span>
 								</div>
 								<div class="progress">

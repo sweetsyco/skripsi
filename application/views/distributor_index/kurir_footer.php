@@ -11,6 +11,8 @@ $(document).ready(function() {
         const id = button.data('id');
         const nama = button.data('nama');
         const email = button.data('email');
+        const noTel = button.data('no_telepon');
+        const alamat = button.data('alamat');
         const noKendaraan = button.data('no_kendaraan');
         const cakupanArea = button.data('cakupan_area');
         
@@ -20,6 +22,8 @@ $(document).ready(function() {
         modal.find('#editIdKurir').val(id);
         modal.find('#editNama').val(nama);
         modal.find('#editEmail').val(email);
+        modal.find('#editNo').val(noTel);
+        modal.find('#editAlamat').val(alamat);
         modal.find('#editNoKendaraan').val(noKendaraan);
         modal.find('#editCakupanArea').val(cakupanArea);
     });

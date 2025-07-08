@@ -106,13 +106,13 @@
                                     </div>
                                     <div class="action-buttons">
                                         <?php if ($tugas->status == 'pending'): ?>
-                                            <a href="<?= base_url('kurir/mulai_penugasan/'.$tugas->id_penugasan) ?>" class="action-btn btn-start">
-                                                <i class="fas fa-play"></i> Mulai
-                                            </a>
-                                        <?php else: ?>
-                                            <a href="<?= base_url('kurir/verifikasi/'.$tugas->id_penugasan) ?>" class="action-btn btn-verify">
+                                            <button type="button" class="action-btn btn-start"><i class="fas fa-clock"></i> Menunggu</button>
+                                        <?php elseif($tugas->status == 'pick up'): ?>
+                                            <a href="<?= base_url('kurir/verifikasi/upload_bukti/'.$tugas->id_penugasan) ?>" class="action-btn btn-verify">
                                                 <i class="fas fa-check-circle"></i> Verifikasi
                                             </a>
+                                        <?php else :?>
+                                            <button type="button" class="action-btn btn-start"><i class="fas fa-check"></i> Approved</button>
                                         <?php endif; ?>
                                     </div>
                                 </div>

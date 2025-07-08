@@ -54,9 +54,9 @@
                                 <tbody>
                                     <tr>
                                         <td><?= $penugasan['nama_komoditas'] ?></td>
-                                        <td><?= number_format($penugasan['jumlah'], 2) ?> kg</td>
-                                        <td>Rp <?= number_format($penugasan['harga'], 2) ?></td>
-                                        <td>Rp <?= number_format($penugasan['jumlah'] * $penugasan['harga'], 2) ?></td>
+                                        <td><?= number_format($penugasan['jumlah'], 0) ?> kg</td>
+                                        <td>Rp <?= number_format($penugasan['harga'], 0) ?></td>
+                                        <td>Rp <?= number_format($penugasan['jumlah'] * $penugasan['harga'], 0) ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -133,7 +133,15 @@
                                     <p class="small">Oleh: Distributor</p>
                                 </div>
                             </div>
-                            
+                            <?php if($penugasan['foto_bukti']): ?>
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <h6>Bukti Dikirim</h6>
+                                    <p class="text-muted small"><?= date('d M Y H:i', strtotime($penugasan['waktu_bukti'])) ?></p>
+                                </div>
+                            </div>
+                            <?php endif; ?>
                             <?php if($penugasan['diverifikasi_pada']): ?>
                             <div class="timeline-item">
                                 <div class="timeline-marker"></div>
@@ -150,31 +158,21 @@
                                 </div>
                             </div>
                             <?php endif; ?>
-                            
-                            <?php if($penugasan['foto_bukti']): ?>
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <h6>Bukti Dikirim</h6>
-                                    <p class="text-muted small"><?= date('d M Y H:i', strtotime($penugasan['waktu_bukti'])) ?></p>
-                                </div>
-                            </div>
-                            <?php endif; ?>
                         </div>
                     </div>
                     
                     <div class="info-section mb-4">
                         <h4 class="section-title"><i class="fas fa-camera me-2"></i> Bukti Foto</h4>
                         <div class="text-center">
-                            <?php if($penugasan['foto_bukti']): ?>
-                                <a href="<?= base_url($penugasan['foto_bukti']) ?>" target="_blank">
-                                    <img src="<?= base_url($penugasan['foto_bukti']) ?>" class="img-fluid rounded mb-3" alt="Bukti Foto">
+                            <?php if(!empty($penugasan['foto_bukti'])): ?>
+                                <a href="<?= $penugasan['foto_bukti_url'] ?>" target="_blank">
+                                    <img src="<?= $penugasan['foto_bukti_url'] ?>" class="img-fluid rounded mb-3" alt="Bukti Foto">
                                 </a>
                                 <div>
-                                    <a href="<?= base_url($penugasan['foto_bukti']) ?>" class="btn btn-sm btn-primary mr-2" target="_blank">
+                                    <a href="<?= $penugasan['foto_bukti_url'] ?>" class="btn btn-sm btn-primary mr-2" target="_blank">
                                         <i class="fas fa-eye me-1"></i> Lihat
                                     </a>
-                                    <a href="<?= base_url($penugasan['foto_bukti']) ?>" class="btn btn-sm btn-success" download>
+                                    <a href="<?= $penugasan['foto_bukti_url'] ?>" class="btn btn-sm btn-success" download>
                                         <i class="fas fa-download me-1"></i> Unduh
                                     </a>
                                 </div>
@@ -201,32 +199,92 @@
                 </div>
             </div>
             
-            <!-- Aksi Penugasan -->
+            
             <div class="action-section mt-4 pt-4 border-top">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h4>Aksi Penugasan</h4>
-                        <p class="text-muted">Kelola status penugasan</p>
-                    </div>
-                    
-                    <div class="d-flex">
-                        <?php if($penugasan['status'] == 'pending'): ?>
-                            <a href="<?= site_url('distributor/penugasan/update_status/'.$penugasan['id_penugasan'].'/approved') ?>" 
-                               class="btn btn-success mr-2">
-                                <i class="fas fa-check me-1"></i> Setujui
-                            </a>
-                            <a href="<?= site_url('distributor/penugasan/update_status/'.$penugasan['id_penugasan'].'/rejected') ?>" 
-                               class="btn btn-danger">
-                                <i class="fas fa-times me-1"></i> Tolak
-                            </a>
-                        <?php else: ?>
-                            <button class="btn btn-outline-secondary mr-2" disabled>
-                                <i class="fas fa-info-circle me-1"></i> Penugasan Selesai
-                            </button>
-                        <?php endif; ?>
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h4>Aksi Penugasan</h4>
+            <p class="text-muted">Kelola status penugasan</p>
+        </div>
+        
+        <div class="d-flex">
+            <?php if($penugasan['status'] == 'pending'): ?>
+                <!-- Button trigger modal untuk Approve -->
+                <button type="button" class="btn btn-success btn-sm mr-2" data-bs-toggle="modal" data-bs-target="#approveModal">
+                    <i class="fas fa-check me-1"></i> Setujui
+                </button>
+                
+                <!-- Button trigger modal untuk Reject -->
+                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rejectModal">
+                    <i class="fas fa-times me-1"></i> Tolak
+                </button>
+                
+            <?php elseif($penugasan['status'] == 'approved'): ?>
+                <button class="btn btn-outline-secondary mr-2" disabled>
+                    <i class="fas fa-info-circle me-1"></i> Penugasan Selesai
+                </button>
+            <?php elseif($penugasan['status'] == 'rejected'):?>
+                <button class="btn btn-outline-secondary mr-2" disabled>
+                    <i class="fas fa-info-circle me-1"></i> Penawaran Ditolak
+                </button>
+            <?php else :?>
+                <button class="btn btn-outline-secondary mr-2" disabled>
+                    <i class="fas fa-info-circle me-1"></i>Belum Diverifikasi
+                </button>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Approve -->
+<div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="<?= site_url('distributor/penugasan/approve/'.$penugasan['id_penugasan']) ?>" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="approveModalLabel">Konfirmasi Persetujuan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Anda yakin ingin menyetujui penugasan ini?</p>
+                    <div class="mb-3">
+                        <label for="approveNotes" class="form-label">Tambahkan Catatan (Opsional)</label>
+                        <textarea class="form-control" name="catatan" id="approveNotes" rows="3" placeholder="Masukkan catatan jika diperlukan"></textarea>
                     </div>
                 </div>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">Setujui Penugasan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Reject -->
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="<?= site_url('distributor/penugasan/reject/'.$penugasan['id_penugasan']) ?>" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectModalLabel">Konfirmasi Penolakan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Anda yakin ingin menolak penugasan ini?</p>
+                    <div class="mb-3">
+                        <label for="rejectNotes" class="form-label">Alasan Penolakan*</label>
+                        <textarea class="form-control" name="catatan" id="rejectNotes" rows="3" placeholder="Masukkan alasan penolakan" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Tolak Penugasan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
         </div>
     </div>
 </div>

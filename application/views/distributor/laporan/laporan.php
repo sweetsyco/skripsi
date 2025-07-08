@@ -150,10 +150,10 @@
                                         <div class="text-muted small">ID: <?= $laporan->id_permintaan ?></div>
                                     </td>
                                     <td><?= date('d M Y', strtotime($laporan->dibuat_pada)) ?></td>
-                                    <td><?= number_format($laporan->jumlah, 2) ?> kg</td>
+                                    <td><?= number_format($laporan->jumlah, 0) ?> kg</td>
                                     <td>Rp <?= number_format($laporan->harga_maks, 0, ',', '.') ?>/kg</td>
                                     <td><?= $laporan->jumlah_penawaran ?></td>
-                                    <td><?= number_format($laporan->jumlah_diterima, 2) ?> kg</td>
+                                    <td><?= number_format($laporan->jumlah_diterima, 0) ?> kg</td>
                                     <td><?= $laporan->jumlah_pengiriman ?></td>
                                     <td>
                                         <span class="status-badge <?= ($laporan->status == 'selesai') ? 'badge-closed' : 'badge-open' ?>">

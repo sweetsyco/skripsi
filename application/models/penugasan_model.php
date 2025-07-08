@@ -71,15 +71,20 @@ class Penugasan_model extends CI_Model {
         return $this->db->insert_id();
     }
 
-    public function update_status($id_penugasan, $status) {
-    $data = [
-        'status' => $status,
-        'diverifikasi_pada' => date('Y-m-d H:i:s'),
-        'diverifikasi_oleh' => $this->session->userdata('id_pengguna')
-    ];
-    
-    $this->db->where('id_penugasan', $id_penugasan);
-    return $this->db->update('penugasan', $data);
+    public function update_status($id_penugasan, $status, $catatan = null) {
+        $data = ['status' => $status];
+        
+        if ($catatan) {
+            $data['catatan'] = $catatan;
+        }
+        
+        if ($status == 'approved' || $status == 'rejected') {
+            $data['diverifikasi_pada'] = date('Y-m-d H:i:s');
+            $data['diverifikasi_oleh'] = $this->session->userdata('user_id');
+        }
+        
+        $this->db->where('id_penugasan', $id_penugasan);
+        return $this->db->update('penugasan', $data);
     }
 
     public function get_penugasan_by_petani($id_petani) {
@@ -163,7 +168,6 @@ class Penugasan_model extends CI_Model {
     return $this->db->get()->row_array();
 }
 
-// Fungsi untuk mendapatkan detail kurir
 public function get_kurir_detail($id_kurir) {
     $this->db->select('kurir.*, pengguna.id_pengguna, pengguna.nama');
     $this->db->from('kurir');
@@ -197,15 +201,7 @@ public function get_accepted_penawaran($id_distributor) {
     
     return $this->db->get()->result_array();
 }
-public function start_pickup($id_penugasan) {
-    $data = [
-        'status' => 'pick_up',
-        'pickup_mulai_pada' => date('Y-m-d H:i:s') // tambahkan timestamp
-    ];
-    
-    $this->db->where('id_penugasan', $id_penugasan);
-    return $this->db->update('penugasan', $data);
-}
+
 
     public function get_penugasan_by_kurir($id_kurir) {
         $this->db->select('penugasan.*, penawaran.jumlah, komoditas.nama_komoditas, pengguna.nama as nama_petani, distributor.nama_perusahaan'); // HAPUS KOMA BERLEBIH
@@ -225,9 +221,9 @@ public function start_pickup($id_penugasan) {
         return $this->db->get('penugasan')->row_array();
     }
 
-    public function update_penugasan($id_penugasan, $data) {
+    public function upload_bukti($id_penugasan, $data) {
         $this->db->where('id_penugasan', $id_penugasan);
-        $this->db->update('penugasan', $data);
+        return $this->db->update('penugasan', $data);
     }
     public function get_riwayat_by_kurir($id_kurir) {
         $this->db->select('p.*, k.nama_komoditas, k.satuan, pen.jumlah, pen.harga, peng.nama AS nama_petani, d.nama_perusahaan');
@@ -243,6 +239,32 @@ public function start_pickup($id_penugasan) {
         $this->db->order_by('p.ditugaskan_pada', 'DESC');
         
         return $this->db->get()->result();
+    }
+    public function get_detail_penugasan($id_penugasan) {
+        $this->db->select('
+            penugasan.*,
+            penawaran.jumlah as jumlah_penawaran,
+            penawaran.harga as harga_penawaran,
+            permintaan.jumlah as jumlah_permintaan,
+            permintaan.harga_maks,
+            komoditas.nama_komoditas,
+            komoditas.satuan,
+            distributor.nama_perusahaan,
+            distributor.alamat as alamat_distributor,
+            distributor.no_telepon as telp_distributor,
+            pengguna.nama as nama_kurir,
+            kurir.no_kendaraan,
+            kurir.cakupan_area
+        ');
+        $this->db->from('penugasan');
+        $this->db->join('penawaran', 'penugasan.id_penawaran = penawaran.id_penawaran');
+        $this->db->join('permintaan', 'penawaran.id_permintaan = permintaan.id_permintaan');
+        $this->db->join('komoditas', 'permintaan.id_komoditas = komoditas.id_komoditas');
+        $this->db->join('distributor', 'permintaan.id_distributor = distributor.id_distributor');
+        $this->db->join('kurir', 'penugasan.id_kurir = kurir.id_kurir');
+        $this->db->join('pengguna', 'kurir.id_pengguna = pengguna.id_pengguna');
+        $this->db->where('penugasan.id_penugasan', $id_penugasan);
+        return $this->db->get()->row_array();
     }
 
 }

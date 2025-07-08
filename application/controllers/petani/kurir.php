@@ -30,31 +30,18 @@ class Kurir extends CI_Controller {
         $this->load->view('petani_index/kurir_footer');
     }
 
-    public function get_detail($id_penugasan) {
-    $id_pengguna = $this->session->userdata('user_id');
-    $petani = $this->petani_model->get_petani_data($id_pengguna);
-    
-    if(empty($petani)) {
-        $response = array('status' => 'error', 'message' => 'Profil petani tidak ditemukan');
-        $this->output->set_content_type('application/json')->set_output(json_encode($response));
-        return;
-    }
-    
-    $id_petani = $petani['id_petani'];
-    $penugasan = $this->penugasan_model->get_penugasan_detail_petani($id_penugasan, $id_petani);
-    
-    if(empty($penugasan)) {
-        $response = array('status' => 'error', 'message' => 'Data penugasan tidak ditemukan');
-        $this->output->set_content_type('application/json')->set_output(json_encode($response));
-        return;
-    }
-    
-    // Format data untuk response
-    $data = array(
-        'status' => 'success',
-        'data' => $penugasan
-    );
-    
-    $this->output->set_content_type('application/json')->set_output(json_encode($data));
+    public function detail($id_penugasan) {
+        $data['penugasan'] = $this->penugasan_model->get_detail_penugasan($id_penugasan);
+        
+        if (!$data['penugasan']) {
+            show_404();
+        }
+
+        $data['title'] = 'Detail Penugasan Kurir';
+        
+        $this->load->view('petani_index/index',$data);
+        $this->load->view('petani_index/header');
+        $this->load->view('petani/kurir/detail', $data);
+        $this->load->view('petani_index/kurir_footer');
     }
 }

@@ -88,33 +88,61 @@ class Penawaran extends CI_Controller {
                     'dibuat_pada' => date('Y-m-d H:i:s')
                 ];
 
-                $id_penawaran = $this->penawaran_model->create_penawaran($data_penawaran);
+                if($id_penawaran = $this->penawaran_model->create_penawaran($data_penawaran)){
+                     $aktivitas_distributor = [
+                    'id_pengguna' => $this->session->userdata('user_id'),
+                    'id_distributor' => $this->session->userdata('id_distributor'),
+                    'jenis' => 'Penawaran',
+                    'pesan' => "Penawaran baru untuk Permintaan {$permintaan['nama_komoditas']} Sebanyak {$permintaan['jumlah']} kg",
+                    'waktu' => date('Y-m-d H:i:s')
+                    ];
+                    $this->db->insert('aktivitas', $aktivitas_distributor);
+                    $this->session->set_flashdata('success', 'Penugasan berhasil dibuat!');
+                }else{
+                    $this->session->set_flashdata('error', 'Gagal membuat penugasan');
+                }
                
                 redirect('petani/penawaran');
                 
             }
         }
 
-    // Detail penawaran
-    public function view($id_penawaran) {
-        $id_pengguna = $this->session->userdata('id_pengguna');
-        $data['petani'] = $this->petani_model->get_petani_data($id_pengguna);
-        if(empty($data['petani'])) {
-            show_error('Profil petani tidak ditemukan. Silakan lengkapi profil Anda.', 404);
+    
+    public function get_detail_json($id_penawaran) {
+        $id_pengguna = $this->session->userdata('user_id');
+        $petani = $this->petani_model->get_petani_data($id_pengguna);
+        
+        if(empty($petani)) {
+            echo json_encode(['error' => 'Profil petani tidak ditemukan']);
+            return;
         }
-        $id_petani = $data['petani']['id_petani'];
-
-        $data['penawaran'] = $this->penawaran_model->get_penawaran_by_id($id_penawaran, $id_petani);
-        if(empty($data['penawaran'])) {
-            show_404();
+        
+        $id_petani = $petani['id_petani'];
+        $penawaran = $this->penawaran_model->get_penawaran_by_id($id_penawaran, $id_petani);
+        
+        if(empty($penawaran)) {
+            echo json_encode(['error' => 'Penawaran tidak ditemukan']);
+            return;
         }
-
-        $this->load->view('penawaran/view', $data);
+        
+        $response = [
+            'success' => true,
+            'data' => [
+                'komoditas' => $penawaran['nama_komoditas'],
+                'distributor' => $penawaran['nama_perusahaan'],
+                'jumlah' => number_format($penawaran['jumlah']) . ' kg',
+                'harga' => 'Rp ' . number_format($penawaran['harga'], 0, ',', '.'),
+                'status' => $penawaran['status'],
+                'tanggal' => date('d M Y', strtotime($penawaran['dibuat_pada']))
+            ]
+        ];
+        
+        echo json_encode($response);
     }
 
     // Edit penawaran
     public function update() {
-        $id_pengguna = $this->session->userdata('id_pengguna');
+        $id_pengguna = $this->session->userdata('user_id');
         $data['petani'] = $this->petani_model->get_petani_data($id_pengguna);
         
         if(empty($data['petani'])) {
@@ -173,49 +201,19 @@ class Penawaran extends CI_Controller {
         }
         redirect('petani/penawaran');
     }
-    public function get_detail_json($id_penawaran) {
-        $id_pengguna = $this->session->userdata('user_id');
-        $petani = $this->petani_model->get_petani_data($id_pengguna);
-        
-        if(empty($petani)) {
-            echo json_encode(['error' => 'Profil petani tidak ditemukan']);
-            return;
-        }
-        
-        $id_petani = $petani['id_petani'];
-        $penawaran = $this->penawaran_model->get_penawaran_by_id($id_penawaran, $id_petani);
-        
-        if(empty($penawaran)) {
-            echo json_encode(['error' => 'Penawaran tidak ditemukan']);
-            return;
-        }
-        
-        $response = [
-            'success' => true,
-            'data' => [
-                'komoditas' => $penawaran['nama_komoditas'],
-                'distributor' => $penawaran['nama_perusahaan'],
-                'jumlah' => number_format($penawaran['jumlah']) . ' kg',
-                'harga' => 'Rp ' . number_format($penawaran['harga'], 0, ',', '.'),
-                'status' => $penawaran['status'],
-                'tanggal' => date('d M Y', strtotime($penawaran['dibuat_pada']))
-            ]
-        ];
-        
-        echo json_encode($response);
-    }
+    
     public function buat_surat_perjanjian($id_penawaran) {
     // Load model dan library
     $this->load->helper('pdf_helper');
     
-    // Dapatkan data penawaran lengkap
     $penawaran = $this->penawaran_model->getByIdWithDetails($id_penawaran);
     
-    // Validasi kepemilikan penawaran
     $id_petani = $this->session->userdata('id_petani');
+    
     if(!$penawaran || $penawaran['id_petani'] != $id_petani || $penawaran['status'] != 'accepted') {
         show_error('Penawaran tidak valid atau belum diterima', 400);
     }
+    
 
     // Data untuk kontrak
     $data = [

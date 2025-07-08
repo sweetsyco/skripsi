@@ -42,7 +42,7 @@ class Profile extends CI_Controller {
         
         if (!$kurir) {
             $this->session->set_flashdata('error', 'Data profil tidak ditemukan');
-            redirect('kurir/profil');
+            redirect('kurir/profile');
         }
 
         $this->form_validation->set_rules('no_telepon', 'Nomor Telepon', 'required');
@@ -54,9 +54,10 @@ class Profile extends CI_Controller {
 
         if ($this->form_validation->run() === FALSE) {
             $data['kurir'] = $kurir;
-            $this->load->view('kurir/templates/header');
-            $this->load->view('kurir/profile/edit', $data);
-            $this->load->view('kurir/templates/footer');
+            $this->load->view('kurir_index/index',$data);
+            $this->load->view('kurir_index/header');
+            $this->load->view('kurir/profile/index', $data);
+            $this->load->view('kurir_index/footer');
         } else {
             $update_data = [
                 'no_telepon' => $this->input->post('no_telepon'),
@@ -78,7 +79,7 @@ class Profile extends CI_Controller {
                 $this->session->set_flashdata('error', 'Gagal memperbarui profil');
             }
 
-            redirect('kurir/profil');
+            redirect('kurir/profile');
         }
     }
 }

@@ -26,11 +26,11 @@ class Dashboard extends CI_Controller {
         }
         
         
-        // Ambil data penugasan
+       
         $data['penugasan_aktif'] = $this->Kurir_model->get_active_assignments($id_kurir);
-        $data['aktivitas'] = $this->db->get('aktivitas')->result_array();
+        $data['aktivitas'] = $this->Kurir_model->get_recent_activities($id_pengguna);
         
-        // Ambil statistik
+        
         $stats = $this->Kurir_model->get_assignment_stats($id_kurir);
         $data['total_penugasan'] = $stats['total'];
         $data['dalam_proses'] = $stats['pick up'];
@@ -43,22 +43,6 @@ class Dashboard extends CI_Controller {
         $this->load->view('kurir_index/footer');
     }
 
-    public function mulai_penugasan($id_penugasan) {
-        if ($this->Kurir_model->update_assignment_status($id_penugasan, 'approved')) {
-            $this->session->set_flashdata('success', 'Penugasan telah dimulai!');
-        } else {
-            $this->session->set_flashdata('error', 'Gagal memulai penugasan.');
-        }
-        redirect('kurir');
-    }
-    public function mulai_pickup($id_penugasan) {
-        if ($this->Penugasan_model->start_pickup($id_penugasan)) {
-            $this->session->set_flashdata('success', 'Pengambilan barang telah dimulai!');
-        } else {
-            $this->session->set_flashdata('error', 'Gagal memulai pengambilan barang.');
-        }
-        redirect('kurir');
-    }
 
     public function verifikasi_penugasan($id_penugasan) {
         if ($this->Kurir_model->update_assignment_status($id_penugasan, 'completed')) {

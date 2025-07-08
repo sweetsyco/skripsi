@@ -14,8 +14,8 @@
                 <div class="verification-image" id="image-preview">
                     <i class="fas fa-camera"></i>
                     <span>Klik untuk upload foto</span>
-                    <input type="file" name="foto_bukti" id="foto_bukti" style="display: none;" required>
                 </div>
+                <input type="file" name="foto_bukti" id="foto_bukti" style="display: none;" required>
                 <small class="text-muted">Format: gif, jpg, jpeg, png. Max 2MB.</small>
                 <?= form_error('foto_bukti', '<small class="text-danger">', '</small>'); ?>
             </div>
@@ -24,13 +24,14 @@
                 <label>Catatan</label>
                 <textarea name="catatan" class="form-control" rows="3"><?= set_value('catatan'); ?></textarea>
             </div>
-            
-            <button type="submit" class="btn btn-action">
-                <i class="fas fa-upload"></i> Upload Bukti
-            </button>
-            <a href="<?= base_url('kurir/verifikasi'); ?>" class="btn btn-keluar">
-                <i class="fas fa-times"></i> Batal
-            </a>
+            <div class="button-group">
+                <button type="submit" class="btn btn-upload">
+                    <i class="fas fa-upload"></i> Upload Bukti
+                </button>
+                <a href="<?= base_url('kurir/verifikasi'); ?>" class="btn btn-batal">
+                    <i class="fas fa-times"></i> Batal
+                </a>
+            </div>
         <?= form_close(); ?>
     </div>
 </div>

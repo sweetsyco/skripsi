@@ -31,4 +31,11 @@ class Distributor_model extends CI_Model {
         $this->db->where('id_distributor', $id_distributor);
         return $this->db->get('distributor')->row();
     }
+    public function get_recent_activities() {
+        $this->db->where_in('jenis', ['penugasan','verifikasi', 'penawaran']); 
+        $this->db->order_by('waktu', 'DESC');
+        $this->db->limit(5);
+        $query = $this->db->get('aktivitas');
+        return $query->num_rows() > 0 ? $query->result_array() : [];
+    }
 }

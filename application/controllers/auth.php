@@ -150,14 +150,14 @@ class Auth extends CI_Controller {
                 $distributor = $this->distributor_model->getByUserId($user->id_pengguna);
                 if ($distributor) {
                     $id_distributor = $distributor->id_distributor;
-                    $nama_perusahaan = $distributor->nama_perusahaan; // Ambil nama perusahaan
+                    $nama_perusahaan = $distributor->nama_perusahaan; 
                 }
                 break;
             case 'petani':
                 $petani = $this->petani_model->getByUserId($user->id_pengguna);
                 if ($petani) {
-                    $id_petani = $petani->id_distributor;
-                    $alamat = $petani->alamat; // Ambil nama perusahaan
+                    $id_petani = $petani->id_petani;
+                    $alamat = $petani->alamat; 
                 }
                 break;
             case 'kurir':
@@ -173,7 +173,7 @@ class Auth extends CI_Controller {
             'peran' => $user->peran,
             'logged_in' => true,
             'id_distributor' => $id_distributor,
-            'nama_distributor' => $nama_perusahaan, // PASTIKAN INI ADA
+            'nama_distributor' => $nama_perusahaan, 
             'id_petani' => $id_petani,
             'id_kurir' => $id_kurir
         );

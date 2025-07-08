@@ -132,6 +132,96 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+   
+    function formatRupiah(angka) {
+        if (angka === undefined || angka === null || isNaN(angka)) {
+            return 'Rp 0';
+        }
+        return 'Rp ' + parseFloat(angka).toLocaleString('id-ID');
+    }
+
+    
+    if (document.querySelector('.btn-edit')) {
+        document.querySelectorAll('.btn-edit').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const komoditas = this.dataset.komoditas;
+                const distributor = this.dataset.distributor;
+                const hargaMax = this.dataset.hargaMax; 
+                const jumlah = this.dataset.jumlah;
+                const harga = this.dataset.harga;
+                
+                document.getElementById('edit-id').value = id;
+                document.getElementById('edit-komoditas').value = komoditas;
+                document.getElementById('edit-distributor').value = distributor;
+                document.getElementById('edit-hargamaks').value = hargaMax;
+                document.getElementById('edit-jumlah').value = jumlah;
+                document.getElementById('edit-harga').value = harga;
+                
+                
+                const hargaInput = document.getElementById('edit-harga');
+                hargaInput.setAttribute('max', hargaMax);
+                
+               
+                const oldInfo = document.getElementById('harga-max-info');
+                if (oldInfo) oldInfo.remove();
+                
+                // Tambahkan info baru
+                const infoElement = document.createElement('small');
+                infoElement.id = 'harga-max-info';
+                infoElement.className = 'form-text text-muted';
+                infoElement.textContent = `Harga maksimal: ${formatRupiah(hargaMax)}`;
+                hargaInput.parentNode.appendChild(infoElement);
+                
+                // Tampilkan modal edit
+                const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+                editModal.show();
+            });
+        });
+    }
+
+    // Validasi real-time pada input harga
+    const editHarga = document.getElementById('edit-harga');
+    if (editHarga) {
+        editHarga.addEventListener('input', function() {
+            const hargaMax = parseFloat(this.getAttribute('max'));
+            const hargaInput = parseFloat(this.value) || 0;
+            const infoElement = document.getElementById('harga-max-info');
+            
+            if (hargaInput > hargaMax) {
+                this.classList.add('is-invalid');
+                if (infoElement) infoElement.classList.add('text-danger');
+            } else {
+                this.classList.remove('is-invalid');
+                if (infoElement) infoElement.classList.remove('text-danger');
+            }
+        });
+    }
+
+  
+    const editForm = document.getElementById('editForm');
+    if (editForm) {
+        editForm.addEventListener('submit', function(e) {
+            const hargaInput = document.getElementById('edit-harga');
+            const hargaMax = parseFloat(hargaInput.getAttribute('max'));
+            const hargaValue = parseFloat(hargaInput.value) || 0;
+            
+            if (hargaValue > hargaMax) {
+                e.preventDefault();
+                
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Harga Melebihi Batas',
+                    text: `Harga tidak boleh melebihi ${formatRupiah(hargaMax)}`,
+                    confirmButtonColor: '#28a745'
+                });
+                
+                
+                hargaInput.focus();
+            }
+        });
+    }
 });
 </script>
 </body>

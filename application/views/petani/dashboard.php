@@ -76,7 +76,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h3>Permintaan Terbaru</h3>
-                        <a href="#" class="small">Lihat Semua</a>
+                        <a href="<?= site_url('/petani/penawaran')?>" class="small">Lihat Semua</a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -122,7 +122,6 @@
                 <div class="card">
                     <div class="card-header">
                         <h3>Aktivitas Terbaru</h3>
-                        <a href="#" class="small">Lihat Semua</a>
                     </div>
                     <div class="card-body">
                         <?php if(!empty($aktivitas_terbaru)) : ?>

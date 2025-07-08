@@ -15,7 +15,7 @@ class Kurir_model extends CI_Model {
 
     public function getByUserId($user_id) {
     $this->db->where('id_pengguna', $user_id);
-    return $this->db->get('kurir')->row(); // Mengembalikan objek
+    return $this->db->get('kurir')->row(); 
     }
 
     public function get_by_distributor($id_distributor) {
@@ -173,7 +173,75 @@ public function get_by_pengguna($id_pengguna) {
         $this->db->where('id_kurir', $id_kurir);
         return $this->db->count_all_results('penugasan');
     }
-
+    
+    public function delete_kurir($id_kurir) {
+        
+        $this->db->select('id_pengguna');
+        $this->db->where('id_kurir', $id_kurir);
+        $query = $this->db->get('kurir');
+        $result = $query->row();
+        
+        if ($result) {
+            $id_pengguna = $result->id_pengguna;
+            
+            
+            $this->db->where('id_kurir', $id_kurir);
+            $this->db->delete('kurir');
+            
+           
+            $this->db->where('id_pengguna', $id_pengguna);
+            $this->db->delete('pengguna');
+            
+            return true;
+        }
+        return false;
+    }
+    // application/models/Penugasan_model.php
+public function get_penugasan_detail($id) {
+    $this->db->select('
+        penugasan.*, 
+        komoditas.nama_komoditas, 
+        penawaran.jumlah,
+        pengguna_kurir.nama AS nama_kurir,
+        penawaran.id_petani,
+        pengguna_petani.nama AS nama_petani,
+        petani.alamat AS alamat_petani,
+        petani.no_telepon AS no_telepon_petani,
+        distributor.alamat AS alamat_distributor,
+        distributor.nama_perusahaan,
+        distributor.id_distributor
+    ');
+    $this->db->from('penugasan');
+    $this->db->join('penawaran', 'penugasan.id_penawaran = penawaran.id_penawaran');
+    $this->db->join('permintaan', 'permintaan.id_permintaan = penawaran.id_permintaan');
+    $this->db->join('komoditas', 'komoditas.id_komoditas = permintaan.id_komoditas');
+    $this->db->join('distributor', 'distributor.id_distributor = permintaan.id_distributor');
+    $this->db->join('petani', 'penawaran.id_petani = petani.id_petani');
+    $this->db->join('pengguna AS pengguna_petani', 'pengguna_petani.id_pengguna = petani.id_pengguna');
+    $this->db->join('kurir', 'penugasan.id_kurir = kurir.id_kurir');
+    $this->db->join('pengguna AS pengguna_kurir', 'pengguna_kurir.id_pengguna = kurir.id_pengguna');
+    $this->db->where('penugasan.id_penugasan', $id);
+    
+    $penugasan = $this->db->get()->row_array();
+    
+    if ($penugasan && !empty($penugasan['foto_bukti'])) {
+        $penugasan['foto_bukti_path'] = FCPATH . 'uploads/bukti/' . $penugasan['foto_bukti'];
+        $penugasan['foto_bukti_url'] = base_url('uploads/bukti/' . $penugasan['foto_bukti']);
+    } else {
+        $penugasan['foto_bukti_path'] = null;
+        $penugasan['foto_bukti_url'] = null;
+    }
+    
+    return $penugasan;
+}
+public function get_recent_activities($id_pengguna) {
+    $this->db->where('id_pengguna', $id_pengguna);
+    $this->db->where_in('jenis', ['penugasan']);
+    $this->db->order_by('waktu', 'DESC');
+    $this->db->limit(5);
+    $query = $this->db->get('aktivitas');
+    return $query->num_rows() > 0 ? $query->result_array() : [];
+}
     
 }
 

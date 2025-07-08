@@ -59,16 +59,15 @@ class Penawaran extends CI_Controller {
         return;
     }
 
-    // Mulai transaksi database
+    
     $this->db->trans_begin();
 
     try {
-        // Update status penawaran
         $this->penawaran_model->update_status($id_penawaran, $status_baru);
 
-        // Jika status diterima, kurangi sisa permintaan
+        
         if ($status_baru == 'accepted') {
-            // Dapatkan data permintaan terkait
+           
             $permintaan = $this->permintaan_model->get_by_id($penawaran['id_permintaan']);
             
             if ($permintaan) {

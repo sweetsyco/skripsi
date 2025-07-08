@@ -15,7 +15,7 @@ class Petani_model extends CI_Model {
 
     public function getByUserId($user_id) {
     $this->db->where('id_pengguna', $user_id);
-    return $this->db->get('petani')->row(); // Mengembalikan objek
+    return $this->db->get('petani')->row(); 
     }
 
     public function get_stats($id_petani) {
@@ -75,12 +75,13 @@ class Petani_model extends CI_Model {
     return $query->num_rows() > 0 ? $query->result_array() : [];
     }
 
-    // Ambil aktivitas terbaru
+    
     public function get_recent_activities() {
-    $this->db->order_by('waktu', 'DESC');
-    $this->db->limit(5);
-    $query = $this->db->get('aktivitas');
-    return $query->num_rows() > 0 ? $query->result_array() : [];
+        $this->db->where_in('jenis', ['penawaran', 'verifikasi']); 
+        $this->db->order_by('waktu', 'DESC');
+        $this->db->limit(5);
+        $query = $this->db->get('aktivitas');
+        return $query->num_rows() > 0 ? $query->result_array() : [];
     }
 
     // Ambil data petani berdasarkan ID pengguna
